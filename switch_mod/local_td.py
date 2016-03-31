@@ -178,10 +178,11 @@ def define_components(mod):
         initialize=lambda m, lz, t: (
             m.lz_demand_mw[lz, t] * m.distribution_loss_rate))
     mod.LZ_Energy_Components_Consume.append('distribution_losses')
+    mod.planning_reserve_margin = Param(within=NonNegativeReals, default=0.15)
     mod.Meet_Local_TD = Constraint(
         mod.LOAD_ZONES, mod.PERIODS,
         rule=lambda m, lz, period: (
-            m.LocalTDCapacity[lz, period] >= m.lz_peak_demand_mw[lz, period]))
+            m.LocalTDCapacity[lz, period] >= m.lz_peak_demand_mw[lz, period]*m.planning_reserve_margin))
     # mod.local_td_lifetime_yrs = Param(default=20)
     mod.local_td_annual_cost_per_mw = Param(
         mod.LOAD_ZONES,
