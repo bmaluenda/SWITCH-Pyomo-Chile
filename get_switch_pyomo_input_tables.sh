@@ -250,7 +250,7 @@ WHERE training_set_id = $TRAINING_SET_ID ORDER BY 1;" >> timepoints.tab
 echo '	load_zones.tab...'
 echo -e 'LOAD_ZONE\tlz_cost_multipliers\tlz_ccs_distance_km\tlz_dbid\texisting_local_td\tlocal_td_annual_cost_per_mw' >>load_zones.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT ALL la_id, '1.0', ccs_distance_km, la_id_num,  present_day_max_coincident_demand_mwh_for_distribution*(1+0.15),\
-distribution_new_annual_payment_per_mw
+CASE WHEN distribution_new_annual_payment_per_mw = 0 THEN '0.01' ELSE distribution_new_annual_payment_per_mw END
 FROM chile.load_area;" >> load_zones.tab
 
 echo '	loads.tab...'
@@ -290,7 +290,8 @@ FROM chile.la_hourly_demand_2060
 	JOIN chile.load_area USING (la_id) 
   WHERE training_set_id = $TRAINING_SET_ID  
     AND year = FLOOR( period_start + years_per_period/2) 
-  GROUP BY la_id, period_start;">>lz_peak_loads.tab
+  GROUP BY la_id, period_start
+  ORDER BY 1,2;">>lz_peak_loads.tab
 
   
 ########################################################
@@ -312,8 +313,7 @@ FROM chile.la_hourly_demand_2060
 echo '	transmission_lines.tab...'
 echo -e 'TRANSMISSION_LINE\ttrans_lz1\ttrans_lz2\ttrans_length_km\ttrans_efficiency\texisting_trans_cap' >>transmission_lines.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT transmission_line_id, \
-la_start, la_end, transmission_length_km, transmission_efficiency, \
-existing_transfer_capacity_mw
+la_start, la_end, CASE WHEN transmission_length_km = 0 THEN '0.01' ELSE transmission_length_km END, transmission_efficiency, CASE WHEN existing_transfer_capacity_mw = 0 THEN '0.01' ELSE existing_transfer_capacity_mw END
 FROM chile.transmission_between_la
 WHERE la_start < la_end ORDER BY 2,3;">>transmission_lines.tab	
 
@@ -330,7 +330,7 @@ echo '	trans_params.dat...'
 echo 'param trans_capital_cost_per_mw_km:=1000;'>>trans_params.dat
 echo 'param trans_lifetime_yrs:=20;'>>trans_params.dat
 echo 'param trans_fixed_o_m_fraction:=0.03;'>>trans_params.dat
-echo 'param distribution_losses:=0.0652;'>>trans_params.dat
+echo 'param distribution_loss_rate:=0.0652;'>>trans_params.dat
 
 ########################################################
 # FUEL
@@ -379,22 +379,30 @@ GROUP BY la_id, fuel, period_start ORDER BY la_id, fuel, period_start;" >> fuel_
 #Projects in Pyomo are approach at a bit differently: all projects are listed in this file, regardless of if they exist or not. Existing projects' capacities are specified in the next file. So, a UNION must be implemented.
 #Outage rates are defaulted to the generic technology.
 #Existing projects don't have capacity limits specified.
+#In the AMPL model capacity limits are only enforced for projects which are "resource_limited".
 #Careful with solar central station projects, because there are extra constraints in AMPL that use an additional capacity parameter (capacity_limit_conversion).
+#Parameters that don't apply to certain projects must be defaulted to a dot ('.') or Pyomo will raise an error.
+
 echo '	project_info.tab...'
 echo -e 'PROJECT\tproj_gen_tech\tproj_load_zone\tproj_connect_cost_per_mw\tproj_variable_om\tproj_full_load_heat_rate\tproj_forced_outage_rate\tproj_scheduled_outage_rate\tproj_dbid\tproj_capacity_limit_mw' >> project_info.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT plant_name, \
 technology, la_id, connect_cost_per_mw, variable_o_m, \
-heat_rate, '.', '.', project_id, '.'
+CASE WHEN heat_rate>0 THEN TO_CHAR(heat_rate::real,'999D9') ELSE '.' END, \
+'.', '.', project_id, '.'
 FROM chile.existing_plants
 WHERE complete_data AND project_id <> 'SING2' AND project_id <> 'SING3' AND project_id <> 'SING4' AND project_id <> 'SING5'
 UNION
 SELECT TO_CHAR(np.project_id, '999'), np.technology, np.la_id, np.connect_cost_per_mw, \
-gi.variable_o_m, np.heat_rate, '.', '.', TO_CHAR(np.project_id, '999'), \
-TO_CHAR(np.capacity_limit * np.capacity_limit_conversion::real,'9999D9')
+gi.variable_o_m, CASE WHEN np.heat_rate>0 THEN TO_CHAR(np.heat_rate::real,'999D9') ELSE '.' END, \
+'.', '.', TO_CHAR(np.project_id, '999'), \
+CASE WHEN resource_limited THEN TO_CHAR(np.capacity_limit * np.capacity_limit_conversion::real,'9999D9') ELSE '.' END
 FROM chile.new_projects_v4 np
 JOIN chile.generator_info_v2 gi USING (technology_id)
 JOIN chile.new_projects_scenarios ps USING (project_id)
-WHERE ps.new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID;">> project_info.tab
+WHERE ps.new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID
+ORDER BY 2,1;">> project_info.tab
+
+#Projects SING2, SING3, SING4 and SING5 are RoR plants in the northern system, for which there is no available hydro info in the DB, so they are excluded.
 
 echo '	proj_existing_builds.tab...'
 echo -e 'PROJECT\tbuild_year\tproj_existing_cap' >> proj_existing_builds.tab
@@ -405,6 +413,15 @@ WHERE complete_data AND project_id <> 'SING2'
 AND project_id <> 'SING3' AND project_id <> 'SING4' 
 AND project_id <> 'SING5';">> proj_existing_builds.tab
 
+#Existing projects must have their overnight costs specified here.
+echo '	proj_build_costs.tab...'
+echo -e 'PROJECT\tbuild_year\tproj_overnight_cost\tproj_fixed_om' >> proj_build_costs.tab
+$connection_string -A -t -F  $'\t' -c  "SELECT plant_name, \
+start_year, overnight_cost, fixed_o_m
+FROM chile.existing_plants
+WHERE complete_data AND project_id <> 'SING2' 
+AND project_id <> 'SING3' AND project_id <> 'SING4' 
+AND project_id <> 'SING5';" >> proj_build_costs.tab
 
 ########################################################
 # GENERATOR TECHNOLOGIES
@@ -412,19 +429,23 @@ AND project_id <> 'SING5';">> proj_existing_builds.tab
 #Unit Sizes are not implemented, since there is no info in the AMPL DB
 #CCS energy loads are not defined in AMPL, so no info is available
 #Battery storage may cause problems
+#Care must be exercised when defining parameters that do not apply to all technologies, such as heat rate (i.e. heat rate means nothing to solar PV technologies). A value of 0 is written by default from the DB, but Pyomo needs a dot ('.') when a parameter doesn't apply.
+#"Water fueled" plants (RoR and dams) are marked as variable, since in Pyomo that means they have an exogenous constraint on their production (which is how hydro plants are modelled in Switch-Chile for now).
+
 echo '	generator_info.tab'
 echo -e 'generation_technology\tg_max_age\tg_is_variable\tg_is_baseload\tg_is_flexible_baseload\tg_is_cogen\tg_competes_for_space\tg_variable_o_m\tg_energy_source\tg_dbid\tg_scheduled_outage_rate\tg_forced_outage_rate\tg_min_build_capacity\tg_full_load_heat_rate\tg_unit_size\tg_ccs_capture_efficiency\tg_ccs_energy_load\tg_storage_efficiency\tg_store_to_release_ratio' >> generator_info.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT technology, \
-max_age_years, CASE WHEN intermittent THEN 1 ELSE 0 END, \
+max_age_years, CASE WHEN intermittent OR fuel = 'Water' OR fuel = 'Water_RPS' THEN 1 ELSE 0 END, \
 CASE WHEN baseload THEN 1 ELSE 0 END, \
 CASE WHEN flexible_baseload THEN 1 ELSE 0 END, \
 CASE WHEN cogen THEN 1 ELSE 0 END, \
 CASE WHEN competes_for_space THEN 1 ELSE 0 END, \
 variable_o_m, fuel, technology_id, scheduled_outage_rate, \
-forced_outage_rate, min_build_capacity, heat_rate, '.', \
+forced_outage_rate, min_build_capacity, \
+CASE WHEN heat_rate>0 THEN TO_CHAR(heat_rate::real, '999D9') ELSE '.' END, '.', \
 CASE WHEN carbon_content_without_carbon_accounting>0 THEN carbon_sequestered/carbon_content_without_carbon_accounting ELSE 0 END, \
 '.', \
-storage_efficiency, max_store_rate
+storage_efficiency, CASE WHEN max_store_rate > 0 THEN TO_CHAR(max_store_rate::real, '999D9') ELSE '.' END
 FROM chile.generator_info_v2 
 JOIN chile.fuel_info USING (fuel) 
 ORDER BY technology_id;" >> generator_info.tab
@@ -439,21 +460,24 @@ $connection_string -A -t -F  $'\t' -c  "SELECT gc.technology, \
 period_start, AVG(gc.overnight_cost), gi.fixed_o_m
 FROM chile.generator_info_v2 gi 
 JOIN chile.generator_costs_yearly gc USING (technology), chile.training_set_periods
-WHERE year >= period_start - gi.construction_time_years
-AND year <= period_end - gi.construction_time_years
-AND period_start >= gi.construction_time_years + $present_year \
+WHERE year >= period_start
+AND year <= period_end
+AND period_start >= $present_year \
 AND	period_start >= gi.min_build_year \
 AND training_set_id=$TRAINING_SET_ID \
 AND overnight_cost_id=$OVERNIGHT_COST_ID
 GROUP BY gc.technology, period_start, gi.fixed_o_m
-UNION
-SELECT gc.technology, year, gc.overnight_cost, gi.fixed_o_m
-FROM chile.generator_info_v2 gi 
-JOIN chile.generator_costs_yearly gc USING (technology), chile.training_set_periods
-WHERE year = $present_year
-AND training_set_id=$TRAINING_SET_ID \
-AND overnight_cost_id=$OVERNIGHT_COST_ID
 ORDER BY technology, period_start;">>gen_new_build_costs.tab
+
+#Eliminated current costs to avoid error in loading inputs to Pyomo.
+# UNION
+# SELECT gc.technology, year, gc.overnight_cost, gi.fixed_o_m
+# FROM chile.generator_info_v2 gi 
+# JOIN chile.generator_costs_yearly gc USING (technology), chile.training_set_periods
+# WHERE year = $present_year
+# AND training_set_id=$TRAINING_SET_ID \
+# AND overnight_cost_id=$OVERNIGHT_COST_ID
+
 
 
 ########################################################
@@ -477,7 +501,7 @@ echo 'param discount_rate := .07;'>>financials.dat
 echo '	variable_capacity_factors.tab... inserting non-RoR'
 echo -e 'PROJECT\ttimepoint\tproj_max_capacity_factor' >>variable_capacity_factors.tab
 $connection_string -A -t -F  $'\t' -c  "
-SELECT TO_CHAR(project_id, '999'), t3.hour_number, capacity_factor
+SELECT TO_CHAR(project_id, '999'), t3.hour_number, CASE WHEN capacity_factor>1.999 THEN 1.999 ELSE capacity_factor END
 	FROM(
 		SELECT project_id, la_id, month_of_year, hour_of_year, hour_of_day, capacity_factor
 		FROM chile.new_projects_intermittent_capacity_factor_puc
@@ -491,7 +515,7 @@ SELECT TO_CHAR(project_id, '999'), t3.hour_number, capacity_factor
 	JOIN chile.new_projects_scenarios USING (project_id)
 	WHERE new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID
 UNION
-SELECT project_id, t3.hour_number, capacity_factor
+SELECT plant_name, t3.hour_number, capacity_factor
 	FROM(
 		SELECT project_id, la_id, month_of_year, hour_of_year, hour_of_day, capacity_factor
 		FROM chile.existing_plant_intermittent_capacity_factor
@@ -503,10 +527,9 @@ SELECT project_id, t3.hour_number, capacity_factor
 		JOIN chile.hours_2060 USING (hour_number)
 		WHERE training_set_id = $TRAINING_SET_ID ORDER BY 1,2) t3 USING (hour_of_year)
 WHERE technology <> 'Hydro_NonPumped' 
-AND	project_id in ('SIC70','SIC71','SIC72','SIC73','SIC74', \
-		'SIC17','SIC32','SIC42','SIC48','SIC49','SIC53')
 ORDER BY 1, 2;">> variable_capacity_factors.tab
-  
+ 
+#AND project_id in ('SIC70','SIC71','SIC72','SIC73','SIC74','SIC17','SIC32','SIC42','SIC48','SIC49','SIC53')
   
 #Note from JP and Paty: The file is made in two steps: First, add the RoR cap factors averaged through the period. Second, directly sample the remaining intermittent cap factors.
 # Note that I exclude technology_id 118 (New RoR) instead of 121 (EP RoR) because of an error in the initial assignment. This doesn't affect the loading of data because the technology_id is not loaded, but the name (technology)
@@ -545,21 +568,39 @@ order by 1,2,4) t2 \
 group by 1,2,3 order by 1,2,3;"
  
 #Capacity factors from the temorary table are inserted into the tab file
-$connection_string -A -t -F  $'\t' -c "SELECT project_id, hour_number, CASE WHEN capacity_factor * avg_adj_factor > 1.4 THEN 1.4 ELSE capacity_factor * avg_adj_factor END
+$connection_string -A -t -F  $'\t' -c "SELECT plant_name, tps.hour_number, CASE WHEN AVG(capacity_factor * avg_adj_factor) > 1.4 THEN 1.4 ELSE AVG(capacity_factor * avg_adj_factor) END
 FROM (
-SELECT project_id, la_id, month_of_year, hour_of_year, hour_of_day, hour_number, capacity_factor
-FROM chile.existing_plant_intermittent_capacity_factor
-JOIN chile.hours_2060 h USING (hour_number, hour_of_year)
-WHERE year = 2014 ) t1
-JOIN chile.existing_plants USING (project_id, la_id) \
-JOIN (	SELECT distinct period AS projection_year, t.hour_of_year, t.timestamp_cst \
-	FROM chile.training_set_timepoints t \
-	WHERE training_set_id = $TRAINING_SET_ID order by 1,2) t3 USING (hour_of_year) \
-JOIN chile.temp_hydro_ror_ep_adjustment_factors USING (project_id, projection_year, month_of_year) \
-WHERE technology <> 'Hydro_NonPumped' AND \
-project_id NOT IN ('SIC70','SIC71','SIC72','SIC73','SIC74','SIC17','SIC32','SIC42','SIC48','SIC49','SIC53') \
-order by 1,2;" >> variable_capacity_factors.tab
+	SELECT project_id, la_id, hour_of_year, month_of_year, capacity_factor, hour_number
+	FROM chile.existing_plant_intermittent_capacity_factor
+	JOIN chile.hours_2060 h USING (hour_number, hour_of_year)
+		WHERE year = 2014 ) t1
+JOIN chile.existing_plants USING (project_id, la_id)
+JOIN (SELECT DISTINCT period as projection_year, t.hour_of_year
+	FROM chile.training_set_timepoints t
+	WHERE training_set_id = $TRAINING_SET_ID order by 1,2) t3
+	USING (hour_of_year)
+JOIN chile.temp_hydro_ror_ep_adjustment_factors 
+	USING (project_id, projection_year, month_of_year)
+JOIN chile.training_set_timepoints tps ON tps.hour_of_year = t3.hour_of_year AND tps.training_set_id = $TRAINING_SET_ID
+WHERE technology <> 'Hydro_NonPumped' AND project_id NOT IN ('SIC70','SIC71','SIC72','SIC73','SIC74','SIC17','SIC32','SIC42','SIC48','SIC49','SIC53')
+GROUP BY plant_name, tps.hour_number
+ORDER BY 1,2;" >> variable_capacity_factors.tab
 
+#I add placeholders for Hydro_NonPumped and Hydro_NonPumped_New generators, because no capacity factor data is available for them, but Pyomo needs the input to exist.
+
+$connection_string -A -t -F  $'\t' -c "SELECT plant_name, \
+hour_number, '0.01'
+FROM chile.existing_plants
+CROSS JOIN chile.training_set_timepoints 
+WHERE technology = 'Hydro_NonPumped' AND training_set_id = $TRAINING_SET_ID
+ORDER BY 1,2 ;" >> variable_capacity_factors.tab
+
+$connection_string -A -t -F  $'\t' -c "SELECT TO_CHAR(project_id, '999'), hour_number, '0.01'
+FROM chile.new_projects_v4 np
+CROSS JOIN chile.training_set_timepoints
+JOIN chile.new_projects_scenarios USING (project_id) 
+WHERE technology = 'Hydro_NonPumped_New' AND training_set_id = $TRAINING_SET_ID AND new_project_portfolio_id=$NEW_PROJECT_PORTFOLIO_ID 
+ORDER BY 1,2 ;" >> variable_capacity_factors.tab
 
  ########################################################
 # RENEWABLE PORTFOLIO STANDARDS

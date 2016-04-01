@@ -36,7 +36,7 @@ def main(argv):
 
     (switch_model, switch_instance) = load(args.inputs_dir)
     opt = pyomo.opt.SolverFactory(args.solver)
-    results = opt.solve(switch_instance, keepfiles=False, tee=False)
+    results = opt.solve(switch_instance, keepfiles=False, tee=True)
     switch_model.save_results(results, switch_instance, args.outputs_dir)
 
     if args.verbose:

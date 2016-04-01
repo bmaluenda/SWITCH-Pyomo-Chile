@@ -318,7 +318,7 @@ def load_inputs(mod, switch_data, inputs_dir):
 
     trans_params.dat
         trans_capital_cost_per_mw_km, trans_lifetime_yrs,
-        trans_fixed_o_m_fraction, distribution_losses
+        trans_fixed_o_m_fraction, distribution_loss_rate
 
 
     """
