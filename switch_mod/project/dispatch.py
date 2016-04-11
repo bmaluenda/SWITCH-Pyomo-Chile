@@ -166,6 +166,12 @@ def define_components(mod):
     mod.DispatchProj = Var(
         mod.PROJ_DISPATCH_POINTS,
         within=NonNegativeReals)
+    mod.SpinningReserveProj = Var(
+        mod.PROJ_DISPATCH_POINTS,
+        within=NonNegativeReals)
+    mod.QuickstartReserveProj = Var(
+        mod.PROJ_DISPATCH_POINTS,
+        within=NonNegativeReals)
     mod.LZ_NetDispatch = Expression(
         mod.LOAD_ZONES, mod.TIMEPOINTS,
         rule=lambda m, lz, t: sum(

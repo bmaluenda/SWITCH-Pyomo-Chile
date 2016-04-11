@@ -63,6 +63,11 @@ def define_components(mod):
     mod.min_data_check('lz_balancing_area')
     mod.BALANCING_AREAS = Set(initialize=lambda m: set(
         m.lz_balancing_area[z] for z in m.LOAD_ZONES))
+    #Added this set for the reserves constraint
+    mod.LOAD_ZONES_IN_BALANCING_AREA = Set(mod.BALANCING_AREAS, 
+        initialize=lambda m, b: set(lz for lz in m.LOAD_ZONES 
+            if m.lz_balancing_area[lz] == b ))
+
     mod.quickstart_res_load_frac = Param(
         mod.BALANCING_AREAS, within=PositiveReals, default=0.03,
         validate=lambda m, val, b: val < 1)
@@ -82,6 +87,39 @@ def define_components(mod):
         mod.BALANCING_AREAS, within=PositiveReals, default=0.05,
         validate=lambda m, val, b: val < 1)
 
+def define_dynamic_components(mod):
+    """
+    Add balancing area reserves requirements
+    Missing: create variables for reserves, add fuel consumption, constraint generation
+    """
+    mod.Spinning_Reserve_Req = Constraint(mod.BALANCING_AREAS, mod.TIMEPOINTS,
+        rule = lambda m, b, t:(
+            sum(m.SpinningReserveProj[proj, tp] 
+                for (proj, tp) in m.PROJ_DISPATCH_POINTS if tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
+            >=
+            m.spinning_res_load_frac[b] * sum(m.lz_demand_mw[lz, t] 
+                for lz in m.LOAD_ZONES_IN_BALANCING_AREA[b]) +
+            m.spinning_res_wind_frac[b] * sum(m.ProjCapacityTP[proj, t] * m.proj_max_capacity_factor[proj, t] 
+                for (proj, tp) in m.PROJ_DISPATCH_POINTS if m.g_energy_source[m.proj_gen_tech[proj]] == 'Wind' 
+                and tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b]) +  
+            m.spinning_res_solar_frac[b] * sum(m.ProjCapacityTP[proj, t] * m.proj_max_capacity_factor[proj, t] 
+                for (proj, tp) in m.PROJ_DISPATCH_POINTS if m.g_energy_source[m.proj_gen_tech[proj]] == 'Solar' 
+                and tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
+            ))
+    mod.Quickstart_Reserve_Req = Constraint(mod.BALANCING_AREAS, mod.TIMEPOINTS,
+        rule = lambda m, b, t:(
+            sum(m.QuickstartReserveProj[proj, tp] 
+                for (proj, tp) in m.PROJ_DISPATCH_POINTS if tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
+            >=
+            m.quickstart_res_load_frac[b] * sum(m.lz_demand_mw[lz, t] 
+                for lz in m.LOAD_ZONES_IN_BALANCING_AREA[b]) +
+            m.quickstart_res_wind_frac[b] * sum(m.ProjCapacityTP[proj, t] * m.proj_max_capacity_factor[proj, t] 
+                for (proj, tp) in m.PROJ_DISPATCH_POINTS if m.g_energy_source[m.proj_gen_tech[proj]] == 'Wind' 
+                and tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b]) +
+            m.quickstart_res_solar_frac[b] * sum(m.ProjCapacityTP[proj, t] * m.proj_max_capacity_factor[proj, t] 
+                for (proj, tp) in m.PROJ_DISPATCH_POINTS if m.g_energy_source[m.proj_gen_tech[proj]] == 'Solar' 
+                and tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
+            ))
 
 def load_inputs(mod, switch_data, inputs_dir):
     """
