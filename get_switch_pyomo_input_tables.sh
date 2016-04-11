@@ -263,6 +263,7 @@ WHERE demand_scenario_id = $DEMAND_SCENARIO_ID \
 AND training_set_id = $TRAINING_SET_ID
 ORDER BY la_id, hour_number;" >> loads.tab
 
+#Required reserves in AMPL are calculated acording to available solar and wind capacity to be dispatched in each lz and tp. This doesn't take into account that you can disconnect a plant (spill all of its power), precisely because you want to avoid the need for further reserves.
 echo '	balancing_areas.tab...'
 echo -e 'BALANCING_AREAS\tquickstart_res_load_frac\tquickstart_res_wind_frac\tquickstart_res_solar_frac\tspinning_res_load_frac\tspinning_res_wind_frac\tspinning_res_solar_frac' >> balancing_areas.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT la_system,\
@@ -318,10 +319,10 @@ FROM chile.transmission_between_la
 WHERE la_start < la_end ORDER BY 2,3;">>transmission_lines.tab	
 
 #No derating factors or multipliers are used in Switch Chile
+#\CASE WHEN new_transmission_builds_allowed = 1 THEN 1 ELSE 0 END
 echo '	trans_optional_params.tab...'
 echo -e 'TRANSMISSION_LINE\ttrans_dbid\ttrans_derating_factor\ttrans_terrain_multiplier\ttrans_new_build_allowed' >>trans_optional_params.tab
-$connection_string -A -t -F  $'\t' -c  "SELECT transmission_line_id, transmission_line_id, '.', '.', \
-CASE WHEN new_transmission_builds_allowed = 1 THEN 1 ELSE 0 END
+$connection_string -A -t -F  $'\t' -c  "SELECT transmission_line_id, transmission_line_id, '.', '.', '.'
 FROM chile.transmission_between_la
 WHERE la_start < la_end ORDER BY 1;">>trans_optional_params.tab	
 
@@ -378,7 +379,7 @@ GROUP BY la_id, fuel, period_start ORDER BY la_id, fuel, period_start;" >> fuel_
 
 #Projects in Pyomo are approach at a bit differently: all projects are listed in this file, regardless of if they exist or not. Existing projects' capacities are specified in the next file. So, a UNION must be implemented.
 #Outage rates are defaulted to the generic technology.
-#Existing projects don't have capacity limits specified.
+#Existing projects are not allowed to be expanded in AMPL, so their capacity limit is set to their current capacity.
 #In the AMPL model capacity limits are only enforced for projects which are "resource_limited".
 #Careful with solar central station projects, because there are extra constraints in AMPL that use an additional capacity parameter (capacity_limit_conversion).
 #Parameters that don't apply to certain projects must be defaulted to a dot ('.') or Pyomo will raise an error.
@@ -388,14 +389,13 @@ echo -e 'PROJECT\tproj_gen_tech\tproj_load_zone\tproj_connect_cost_per_mw\tproj_
 $connection_string -A -t -F  $'\t' -c  "SELECT plant_name, \
 technology, la_id, connect_cost_per_mw, variable_o_m, \
 CASE WHEN heat_rate>0 THEN TO_CHAR(heat_rate::real,'999D9') ELSE '.' END, \
-'.', '.', project_id, '.'
-FROM chile.existing_plants
+'.', '.', project_id, TO_CHAR(capacity_mw::real, '999D9')
+FROM chile.existing_plants_wo_hydro
 WHERE complete_data AND project_id <> 'SING2' AND project_id <> 'SING3' AND project_id <> 'SING4' AND project_id <> 'SING5'
 UNION
 SELECT TO_CHAR(np.project_id, '999'), np.technology, np.la_id, np.connect_cost_per_mw, \
 gi.variable_o_m, CASE WHEN np.heat_rate>0 THEN TO_CHAR(np.heat_rate::real,'999D9') ELSE '.' END, \
-'.', '.', TO_CHAR(np.project_id, '999'), \
-CASE WHEN resource_limited THEN TO_CHAR(np.capacity_limit * np.capacity_limit_conversion::real,'9999D9') ELSE '.' END
+'.', '.', TO_CHAR(np.project_id, '999'), CASE WHEN resource_limited THEN TO_CHAR(np.capacity_limit * np.capacity_limit_conversion::real,'9999D9') ELSE '.' END
 FROM chile.new_projects_v4 np
 JOIN chile.generator_info_v2 gi USING (technology_id)
 JOIN chile.new_projects_scenarios ps USING (project_id)
