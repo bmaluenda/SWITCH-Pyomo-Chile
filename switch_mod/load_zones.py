@@ -13,7 +13,6 @@ SYNOPSIS
 import os
 from pyomo.environ import *
 
-
 def define_components(mod):
     """
 
@@ -133,7 +132,8 @@ def define_dynamic_components(mod):
     Add the planning reserve factor for capacity
     This is just a translation of the AMPL code.
     It had several errors, but this is just for validating.
-    I assume there are no storage projects.
+    I assume there are no storage projects and that 
+    flexible baseload plants are dispatchable.
     """
 
     mod.Capacity_Reserves = Constraint(
@@ -156,7 +156,6 @@ def define_dynamic_components(mod):
                 if lz_from == lz and tp == t)
             
         ))
-
 
 def load_inputs(mod, switch_data, inputs_dir):
     """

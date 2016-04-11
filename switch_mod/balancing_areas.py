@@ -90,7 +90,8 @@ def define_components(mod):
 def define_dynamic_components(mod):
     """
     Add balancing area reserves requirements
-    Missing: create variables for reserves, add fuel consumption, constraint generation
+    For now, only dispatchable projects provide operating reserves.
+    Flexible baseload plants are included in the dispatchable projects.
     """
     mod.Spinning_Reserve_Req = Constraint(mod.BALANCING_AREAS, mod.TIMEPOINTS,
         rule = lambda m, b, t:(

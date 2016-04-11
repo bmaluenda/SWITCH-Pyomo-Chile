@@ -203,6 +203,7 @@ echo 'project.no_commit' >> modules
 echo 'fuel_cost' >> modules
 echo 'trans_build' >> modules
 echo 'trans_dispatch' >> modules
+echo 'balancing_areas' >> modules
 
 # The format for tab files is:
 # col1_name col2_name ...
@@ -408,7 +409,7 @@ echo '	proj_existing_builds.tab...'
 echo -e 'PROJECT\tbuild_year\tproj_existing_cap' >> proj_existing_builds.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT plant_name, \
 start_year, capacity_mw
-FROM chile.existing_plants
+FROM chile.existing_plants_wo_hydro
 WHERE complete_data AND project_id <> 'SING2' 
 AND project_id <> 'SING3' AND project_id <> 'SING4' 
 AND project_id <> 'SING5';">> proj_existing_builds.tab
@@ -418,7 +419,7 @@ echo '	proj_build_costs.tab...'
 echo -e 'PROJECT\tbuild_year\tproj_overnight_cost\tproj_fixed_om' >> proj_build_costs.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT plant_name, \
 start_year, overnight_cost, fixed_o_m
-FROM chile.existing_plants
+FROM chile.existing_plants_wo_hydro
 WHERE complete_data AND project_id <> 'SING2' 
 AND project_id <> 'SING3' AND project_id <> 'SING4' 
 AND project_id <> 'SING5';" >> proj_build_costs.tab
@@ -521,7 +522,7 @@ SELECT plant_name, t3.hour_number, capacity_factor
 		FROM chile.existing_plant_intermittent_capacity_factor
 		JOIN chile.hours_2060 h using (hour_number, hour_of_year)
 		WHERE year = 2014 ) t1
-	JOIN chile.existing_plants using (project_id, la_id)
+	JOIN chile.existing_plants_wo_hydro using (project_id, la_id)
 	JOIN (SELECT distinct year, t.hour_of_year, t.timestamp_cst, hour_number
 		FROM chile.training_set_timepoints t
 		JOIN chile.hours_2060 USING (hour_number)
@@ -574,7 +575,7 @@ FROM (
 	FROM chile.existing_plant_intermittent_capacity_factor
 	JOIN chile.hours_2060 h USING (hour_number, hour_of_year)
 		WHERE year = 2014 ) t1
-JOIN chile.existing_plants USING (project_id, la_id)
+JOIN chile.existing_plants_wo_hydro USING (project_id, la_id)
 JOIN (SELECT DISTINCT period as projection_year, t.hour_of_year
 	FROM chile.training_set_timepoints t
 	WHERE training_set_id = $TRAINING_SET_ID order by 1,2) t3
@@ -590,7 +591,7 @@ ORDER BY 1,2;" >> variable_capacity_factors.tab
 
 $connection_string -A -t -F  $'\t' -c "SELECT plant_name, \
 hour_number, '0.01'
-FROM chile.existing_plants
+FROM chile.existing_plants_wo_hydro
 CROSS JOIN chile.training_set_timepoints 
 WHERE technology = 'Hydro_NonPumped' AND training_set_id = $TRAINING_SET_ID
 ORDER BY 1,2 ;" >> variable_capacity_factors.tab
@@ -658,7 +659,7 @@ $connection_string -A -t -F  $'\t' -c  "insert into chile.hydro_monthly_limits_v
 	join \
 	(select project_id, year, month, cap_fact_weigh * capacity_mw as average_output_mw \
 	from chile.hydro_monthly_limits_1960_2010 \
-	join chile.existing_plants using (project_id) \
+	join chile.existing_plants_wo_hydro using (project_id) \
 	where year > 1960 \
 	order by 1,2,3) t1 using (year), \
 	(select period_start, period_end \
@@ -672,7 +673,7 @@ $connection_string -A -t -F  $'\t' -c  "insert into chile.hydro_monthly_limits_v
 $connection_string -A -t -F  $'\t' -c  "SELECT project_id, la_id, technology, date, ROUND(cast(average_output_mw as numeric),1) AS average_output_mw \
   FROM chile.hydro_monthly_limits_variable hmle \
   JOIN chile.temp7_hydro_study_dates_export t ON hmle.projection_year = t.period and t.month_of_year = hmle.month_of_year \
-  JOIN chile.existing_plants using (project_id);" >> hydro_monthly_limits_ep.tab
+  JOIN chile.existing_plants_wo_hydro using (project_id);" >> hydro_monthly_limits_ep.tab
   
  #JOIN temp7_hydro_study_dates_export USING (projection_year, month_of_year) \ 
   

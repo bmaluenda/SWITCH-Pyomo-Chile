@@ -94,13 +94,16 @@ def define_components(mod):
                 if proj in m.BASELOAD_PROJECTS
             else Constraint.Skip
     )
+
     """
-    Dispatch limit without reserves
+    Upper dispatch limit without reserves
+    -------------------------------------
     mod.Enforce_Dispatch_Upper_Limit = Constraint(
         mod.PROJ_DISPATCH_POINTS,
         rule=lambda m, proj, t: (
             m.DispatchProj[proj, t] <=  m.DispatchUpperLimit[proj, t]))
     """
+    
     mod.Enforce_Dispatch_Upper_Limit = Constraint(
         mod.PROJ_DISPATCH_POINTS,
         rule=lambda m, proj, t: (
@@ -112,6 +115,7 @@ def define_components(mod):
 
     """
     Fuel use without reserves
+    -------------------------
     mod.ProjFuelUseRate_Calculate = Constraint(
         mod.PROJ_WITH_FUEL_DISPATCH_POINTS,
         rule=lambda m, proj, t: (
@@ -119,6 +123,7 @@ def define_components(mod):
             ==
             m.DispatchProj[proj, t] * m.proj_full_load_heat_rate[proj]))
     """
+
     mod.ProjFuelUseRate_Calculate = Constraint(
         mod.PROJ_WITH_FUEL_DISPATCH_POINTS,
         rule=lambda m, proj, t: (
@@ -131,6 +136,8 @@ def define_components(mod):
             ==
             m.DispatchProj[proj, t] * m.proj_full_load_heat_rate[proj])
     )
+    
+
     # allocate the power produced during each timepoint among the fuels
     # Here, we just calculate it from fuel usage and the full load heat rate,
     # but it could be more complicated if we model the plant in more detail.

@@ -292,9 +292,11 @@ def define_components(mod):
         mod.GENERATION_TECHNOLOGIES, within=Boolean)
     mod.g_is_flexible_baseload = Param(
         mod.GENERATION_TECHNOLOGIES, within=Boolean)
+    #Flexible Baseload generators are going to be considered
+    #Dispatchable until I write a proper reserves code and inputss
     mod.g_is_dispatchable = Param(
         mod.GENERATION_TECHNOLOGIES, initialize = lambda m, g:
-        not m.g_is_baseload[g] and not m.g_is_flexible_baseload[g] and not m.g_is_variable[g])
+        not m.g_is_baseload[g] and not m.g_is_variable[g])
     mod.g_is_cogen = Param(
         mod.GENERATION_TECHNOLOGIES, within=Boolean)
     mod.g_min_build_capacity = Param(
