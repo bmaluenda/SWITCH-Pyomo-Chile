@@ -95,7 +95,8 @@ def define_dynamic_components(mod):
     mod.Spinning_Reserve_Req = Constraint(mod.BALANCING_AREAS, mod.TIMEPOINTS,
         rule = lambda m, b, t:(
             sum(m.SpinningReserveProj[proj, tp] 
-                for (proj, tp) in m.PROJ_DISPATCH_POINTS if tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
+                for (proj, tp) in m.DISPATCHABLE_PROJ_DISPATCH_POINTS if tp == t
+                and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
             >=
             m.spinning_res_load_frac[b] * sum(m.lz_demand_mw[lz, t] 
                 for lz in m.LOAD_ZONES_IN_BALANCING_AREA[b]) +
@@ -109,7 +110,8 @@ def define_dynamic_components(mod):
     mod.Quickstart_Reserve_Req = Constraint(mod.BALANCING_AREAS, mod.TIMEPOINTS,
         rule = lambda m, b, t:(
             sum(m.QuickstartReserveProj[proj, tp] 
-                for (proj, tp) in m.PROJ_DISPATCH_POINTS if tp == t and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
+                for (proj, tp) in m.DISPATCHABLE_PROJ_DISPATCH_POINTS if tp == t
+                and m.proj_load_zone[proj] in m.LOAD_ZONES_IN_BALANCING_AREA[b])
             >=
             m.quickstart_res_load_frac[b] * sum(m.lz_demand_mw[lz, t] 
                 for lz in m.LOAD_ZONES_IN_BALANCING_AREA[b]) +

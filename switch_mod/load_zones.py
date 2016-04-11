@@ -147,7 +147,7 @@ def define_dynamic_components(mod):
             sum(m.ProjCapacityTP[proj, t] * (1 - m.proj_scheduled_outage_rate[proj]) 
                 for proj in m.BASELOAD_PROJECTS) +
             sum(m.ProjCapacityTP[proj, t] 
-                for proj in (m.PROJECTS - m.VARIABLE_PROJECTS - m.BASELOAD_PROJECTS)) +
+                for proj in m.DISPATCHABLE_PROJECTS) +
             sum(m.TxPowerReceived[lz_from, lz_to, tp]
                 for (lz_from, lz_to, tp) in m.TRANS_TIMEPOINTS
                 if lz_to == lz and tp == t) -

@@ -263,6 +263,10 @@ def define_components(mod):
         initialize=mod.PROJECTS,
         filter=lambda m, proj: (
             m.g_is_baseload[m.proj_gen_tech[proj]]))
+    mod.DISPATCHABLE_PROJECTS = Set(
+        initialize=mod.PROJECTS,
+        filter=lambda m, proj: (
+            m.g_is_dispatchable[m.proj_gen_tech[proj]]))
     mod.LZ_PROJECTS = Set(
         mod.LOAD_ZONES,
         initialize=lambda m, lz: set(
@@ -271,8 +275,6 @@ def define_components(mod):
     mod.proj_capacity_limit_mw = Param(
         mod.PROJECTS_CAP_LIMITED,
         within=PositiveReals)
-    # Add PROJECTS_LOCATION_LIMITED & associated stuff later
-
     mod.FUEL_BASED_PROJECTS = Set(
         initialize=mod.PROJECTS,
         filter=lambda m, pr: m.g_uses_fuel[m.proj_gen_tech[pr]])

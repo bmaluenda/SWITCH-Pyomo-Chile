@@ -123,6 +123,11 @@ def define_components(mod):
     from hour to hour, but its output can be varied from day to day.
     Some coal plants fall into this category.
 
+    g_is_dispatchable[g] is a binary flag indicating whether a 
+    generation technology can be operated at different capacities 
+    hour to hour. It defaults to all technologies which are not 
+    baseload neither flexible baseload nor variable.
+
     g_is_cogen[g] is a binary flag indicating whether a generation
     technology is a combined heat and power plant that cogenerates heat
     with electricity. A related parameter cogen_thermal_demand[p] can be
@@ -287,6 +292,9 @@ def define_components(mod):
         mod.GENERATION_TECHNOLOGIES, within=Boolean)
     mod.g_is_flexible_baseload = Param(
         mod.GENERATION_TECHNOLOGIES, within=Boolean)
+    mod.g_is_dispatchable = Param(
+        mod.GENERATION_TECHNOLOGIES, initialize = lambda m, g:
+        not m.g_is_baseload[g] and not m.g_is_flexible_baseload[g] and not m.g_is_variable[g])
     mod.g_is_cogen = Param(
         mod.GENERATION_TECHNOLOGIES, within=Boolean)
     mod.g_min_build_capacity = Param(

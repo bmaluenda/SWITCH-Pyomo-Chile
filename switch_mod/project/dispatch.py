@@ -160,6 +160,11 @@ def define_components(mod):
     mod.PROJ_DISPATCH_POINTS = Set(
         dimen=2,
         initialize=init_dispatch_timepoints)
+    #Created this set just to reduce the number of variables of reserves.
+    mod.DISPATCHABLE_PROJ_DISPATCH_POINTS = Set(
+        dimen=2,
+        initialize=init_dispatch_timepoints, 
+        filter = lambda m, proj, t: proj in m.DISPATCHABLE_PROJECTS)
     mod.ProjCapacityTP = Expression(
         mod.PROJ_DISPATCH_POINTS,
         rule=lambda m, proj, t: m.ProjCapacity[proj, m.tp_period[t]])
@@ -167,10 +172,10 @@ def define_components(mod):
         mod.PROJ_DISPATCH_POINTS,
         within=NonNegativeReals)
     mod.SpinningReserveProj = Var(
-        mod.PROJ_DISPATCH_POINTS,
+        mod.DISPATCHABLE_PROJ_DISPATCH_POINTS,
         within=NonNegativeReals)
     mod.QuickstartReserveProj = Var(
-        mod.PROJ_DISPATCH_POINTS,
+        mod.DISPATCHABLE_PROJ_DISPATCH_POINTS,
         within=NonNegativeReals)
     mod.LZ_NetDispatch = Expression(
         mod.LOAD_ZONES, mod.TIMEPOINTS,
