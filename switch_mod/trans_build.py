@@ -236,7 +236,7 @@ def define_components(mod):
     mod.TransCapacityAvailable = Expression(
         mod.TRANSMISSION_LINES, mod.PERIODS,
         rule=lambda m, tx, period: (
-            m.TransCapacity[tx, period] * m.trans_derating_factor[tx]))
+            m.TransCapacity[tx, period] * (1 - m.trans_derating_factor[tx])))
     mod.trans_terrain_multiplier = Param(
         mod.TRANSMISSION_LINES,
         within=Reals,
