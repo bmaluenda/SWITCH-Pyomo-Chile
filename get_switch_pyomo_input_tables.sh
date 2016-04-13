@@ -199,11 +199,12 @@ echo "Present year for discounted costs: $present_year"  >> scenario_params_doc.
 
 echo 'Writing required modules for simulation'
 echo 'local_td' >> modules
-echo 'project.no_commit' >> modules
+echo 'project.unitcommit' >> modules
 echo 'fuel_cost' >> modules
 echo 'trans_build' >> modules
 echo 'trans_dispatch' >> modules
 echo 'balancing_areas' >> modules
+echo 'reserves.operating_reserves' >> modules
 
 # The format for tab files is:
 # col1_name col2_name ...

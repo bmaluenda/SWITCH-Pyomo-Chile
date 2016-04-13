@@ -135,7 +135,7 @@ def define_dynamic_components(mod):
     I assume there are no storage projects and that 
     flexible baseload plants are dispatchable.
     """
-
+"""
     mod.Capacity_Reserves = Constraint(
         mod.LOAD_ZONES,
         mod.TIMEPOINTS,
@@ -155,7 +155,7 @@ def define_dynamic_components(mod):
                 for (lz_from, lz_to, tp) in m.TRANS_TIMEPOINTS
                 if lz_from == lz and tp == t)
             
-        ))
+        ))"""
 
 def load_inputs(mod, switch_data, inputs_dir):
     """
