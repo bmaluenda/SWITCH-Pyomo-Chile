@@ -1,0 +1,4 @@
+BALANCING_AREAS	quickstart_res_load_frac	quickstart_res_wind_frac	quickstart_res_solar_frac	spinning_res_load_frac	spinning_res_wind_frac	spinning_res_solar_frac
+SIC	0.03	0.05	0.05	0.03	0.05	0.05
+SIC2	0.03	0.05	0.05	0.03	0.05	0.05
+SING	0.03	0.05	0.05	0.03	0.05	0.05

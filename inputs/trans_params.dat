@@ -1,0 +1,4 @@
+param trans_capital_cost_per_mw_km:=1000;
+param trans_lifetime_yrs:=20;
+param trans_fixed_o_m_fraction:=0.03;
+param distribution_loss_rate:=0.0652;

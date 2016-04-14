@@ -1,0 +1,16 @@
+fuel	co2_intensity	upstream_co2_intensity
+Gas	0.05306	0
+DistillateFuelOil	0.07315	0
+ResidualFuelOil	0.0788	0
+Coal	0.09552	0
+Uranium	0	0
+Gas_CCS	0.05306	0
+DistillateFuelOil_CCS	0.07315	0
+ResidualFuelOil_CCS	0.0788	0
+Coal_CCS	0.09552	0
+Bio_Solid	0.094345	0
+Bio_Liquid	0.07695	0
+Bio_Gas	0.10612	0
+Bio_Solid_CCS	0.094345	0
+Bio_Liquid_CCS	0.07695	0
+Bio_Gas_CCS	0.10612	0

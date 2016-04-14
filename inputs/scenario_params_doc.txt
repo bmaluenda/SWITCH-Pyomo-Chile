@@ -1,0 +1,23 @@
+Scenario ID: 1
+Scenario name:  get_switch_pyomo_tables.sh test (no special constraints)
+Scenario notes:  Test scenario for Chile 2050 GSIT
+Hydrological window ID:       8
+Hydrology from year:       1976
+RPS enabled:     0
+RPS ID:       0
+Carbon caps enabled:     0
+Carbon cap ID:              0
+Tx constraint enabled:                     0
+SIC-SING Interconection enabled:            1
+Fuel costs ID:             1
+New project portfolio ID:                         8
+Forced renewable plan:                        0
+Training set ID:               17
+Training set notes: For each month, the day with peak load and a representative day with near-median load were selected. The peak day was selected system-wide, while the median was based on total consumption during the day.
+Demand scenario ID:                   1
+Years per period:                10
+Number of timepoints:                    48
+Number of periods:                  4
+Study start year:              2015
+Study end year:      2055
+Present year for discounted costs:      2011
