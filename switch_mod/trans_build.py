@@ -260,8 +260,9 @@ def define_components(mod):
         within=PositiveReals,
         initialize=lambda m, tx: (
             m.trans_capital_cost_per_mw_km * m.trans_terrain_multiplier[tx] *
-            (crf(m.interest_rate, m.trans_lifetime_yrs) +
+            m.trans_length_km[tx] * (crf(m.interest_rate, m.trans_lifetime_yrs) +
                 m.trans_fixed_o_m_fraction)))
+    
     # An expression to summarize annual costs for the objective
     # function. Units should be total annual future costs in $base_year
     # real dollars. The objective function will convert these to

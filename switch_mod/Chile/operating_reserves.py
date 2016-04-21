@@ -58,13 +58,13 @@ def define_components(mod):
     mod.QuickstartReserveProj = Var(
         mod.DISPATCHABLE_PROJ_DISPATCH_POINTS,
         within=NonNegativeReals)
-
+    
     mod.DISPATCHABLE_PROJ_DISP_FUEL_PIECEWISE_CONS_SET = Set(
         dimen=4,
         initialize=mod.PROJ_DISP_FUEL_PIECEWISE_CONS_SET,
         filter=lambda m, proj, t, intercept, incremental_heat_rate: (
             (proj, t) in mod.DISPATCHABLE_PROJ_DISPATCH_POINTS))
-
+    
     mod.ProjSpinningResFuelUseRate = Var(
         mod.PROJ_FUEL_DISPATCH_POINTS,
         within=NonNegativeReals)
@@ -79,7 +79,6 @@ def define_components(mod):
                 m.FUEL_AVAILABILITY))))
     mod.cost_components_tp.append('Spinning_Reserve_Costs_TP')
 
-def define_dynamic_components(mod):
     
     """
     Add balancing area reserves requirements.
@@ -168,11 +167,11 @@ def define_dynamic_components(mod):
             <= m.DispatchUpperLimit[proj, t] - m.DispatchProj[proj, t]          
             )
     )
-"""
+    
     mod.ProjSpinningResFuelUseRate_Calculate = Constraint(
         mod.DISPATCHABLE_PROJ_DISP_FUEL_PIECEWISE_CONS_SET,
         rule=lambda m, proj, t, intercept, incremental_heat_rate: (
             sum(m.ProjSpinningResFuelUseRate[proj, t, f] 
                 for f in m.G_FUELS[m.proj_gen_tech[pr]]) >=
-            incremental_heat_rate * m.SpinningReserveProj[proj, t]))"""
+            incremental_heat_rate * m.SpinningReserveProj[proj, t]))
     

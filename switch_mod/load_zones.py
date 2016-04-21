@@ -99,7 +99,6 @@ def define_components(mod):
     mod.LZ_Energy_Components_Consume = [
         'lz_demand_mw', 'DumpPower']
 
-    mod.capacity_reserve_margin = Param(within = NonNegativeReals, default = 0.15)
 
 def define_dynamic_components(mod):
     """
