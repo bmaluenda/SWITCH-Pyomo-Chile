@@ -77,7 +77,7 @@ fi
 #The commented line creates the string from the user's input.
 #I went around it and wrote my own string to save time.
 #connection_string="psql -h $db_server -U $user $DB_name"
-connection_string="psql -h 127.0.0.1 -p 5433 -U bmaluenda -d switch_gis"
+connection_string="psql -h 127.0.0.1 -p 5433 -U bmaluenda -d switch_chile"
 
 test_connection=`$connection_string -t -c "select count(*) from chile.load_area;"`
 
@@ -96,7 +96,7 @@ read SCENARIO_ID < scenario_id.txt
 # Make sure this scenario id is valid.
 if [ $($connection_string -t -c "select count(*) from chile.scenarios_switch_chile where scenario_id=$SCENARIO_ID;") -eq 0 ]; then 
 	echo "ERROR! This scenario id ($SCENARIO_ID) is not in the database. Exiting."
-	exit;
+	exit 1;
 fi
 
 SCENARIO_NAME=$($connection_string -t -c "select scenario_name from chile.scenarios_switch_chile where scenario_id = $SCENARIO_ID;")
@@ -199,12 +199,12 @@ echo "Present year for discounted costs: $present_year"  >> scenario_params_doc.
 
 echo 'Writing required modules for simulation'
 echo 'local_td' >> modules
-echo 'project.unitcommit' >> modules
+echo 'project.no_commit' >> modules
 echo 'fuel_cost' >> modules
 echo 'trans_build' >> modules
 echo 'trans_dispatch' >> modules
 echo 'balancing_areas' >> modules
-echo 'reserves.operating_reserves' >> modules
+echo 'Chile.exporting' >> modules
 
 # The format for tab files is:
 # col1_name col2_name ...
@@ -316,12 +316,11 @@ FROM chile.la_hourly_demand_2060
 echo '	transmission_lines.tab...'
 echo -e 'TRANSMISSION_LINE\ttrans_lz1\ttrans_lz2\ttrans_length_km\ttrans_efficiency\texisting_trans_cap' >>transmission_lines.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT transmission_line_id, \
-la_start, la_end, CASE WHEN transmission_length_km = 0 THEN '0.01' ELSE transmission_length_km END, transmission_efficiency, CASE WHEN existing_transfer_capacity_mw = 0 THEN '0.01' ELSE existing_transfer_capacity_mw END
+la_start, la_end, transmission_length_km, transmission_efficiency, existing_transfer_capacity_mw
 FROM chile.transmission_between_la
 WHERE la_start < la_end ORDER BY 2,3;">>transmission_lines.tab	
 
 #No derating factors or multipliers are used in Switch Chile
-#\CASE WHEN new_transmission_builds_allowed = 1 THEN 1 ELSE 0 END
 echo '	trans_optional_params.tab...'
 echo -e 'TRANSMISSION_LINE\ttrans_dbid\ttrans_derating_factor\ttrans_terrain_multiplier\ttrans_new_build_allowed' >>trans_optional_params.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT transmission_line_id, transmission_line_id, '.', '.', '.'
@@ -395,7 +394,7 @@ CASE WHEN heat_rate>0 THEN TO_CHAR(heat_rate::real,'999D9') ELSE '.' END, \
 FROM chile.existing_plants_wo_hydro
 WHERE complete_data AND project_id <> 'SING2' AND project_id <> 'SING3' AND project_id <> 'SING4' AND project_id <> 'SING5'
 UNION
-SELECT TO_CHAR(np.project_id, '999'), np.technology, np.la_id, np.connect_cost_per_mw, \
+SELECT TO_CHAR(np.project_id, '999'), np.technology, np.la_id, np.connect_cost_per_mw_new, \
 gi.variable_o_m, CASE WHEN np.heat_rate>0 THEN TO_CHAR(np.heat_rate::real,'999D9') ELSE '.' END, \
 '.', '.', TO_CHAR(np.project_id, '999'), CASE WHEN resource_limited THEN TO_CHAR(np.capacity_limit * np.capacity_limit_conversion::real,'9999D9') ELSE '.' END
 FROM chile.new_projects_v4 np
@@ -433,34 +432,42 @@ AND project_id <> 'SING5';" >> proj_build_costs.tab
 #Battery storage may cause problems
 #Care must be exercised when defining parameters that do not apply to all technologies, such as heat rate (i.e. heat rate means nothing to solar PV technologies). A value of 0 is written by default from the DB, but Pyomo needs a dot ('.') when a parameter doesn't apply.
 #"Water fueled" plants (RoR and dams) are marked as variable, since in Pyomo that means they have an exogenous constraint on their production (which is how hydro plants are modelled in Switch-Chile for now).
+#I wrote some code to ensure only the technologies that are going to be used in the simulation will be written in the input file (both for existing and new plants). This helps keep input and output files cleaner.
 
 echo '	generator_info.tab'
 echo -e 'generation_technology\tg_max_age\tg_is_variable\tg_is_baseload\tg_is_flexible_baseload\tg_is_cogen\tg_competes_for_space\tg_variable_o_m\tg_energy_source\tg_dbid\tg_scheduled_outage_rate\tg_forced_outage_rate\tg_min_build_capacity\tg_full_load_heat_rate\tg_unit_size\tg_ccs_capture_efficiency\tg_ccs_energy_load\tg_storage_efficiency\tg_store_to_release_ratio' >> generator_info.tab
-$connection_string -A -t -F  $'\t' -c  "SELECT technology, \
+$connection_string -A -t -F  $'\t' -c  "SELECT DISTINCT gi.technology, \
 max_age_years, CASE WHEN intermittent OR fuel = 'Water' OR fuel = 'Water_RPS' THEN 1 ELSE 0 END, \
 CASE WHEN baseload THEN 1 ELSE 0 END, \
 CASE WHEN flexible_baseload THEN 1 ELSE 0 END, \
 CASE WHEN cogen THEN 1 ELSE 0 END, \
 CASE WHEN competes_for_space THEN 1 ELSE 0 END, \
-variable_o_m, fuel, technology_id, scheduled_outage_rate, \
+gi.variable_o_m, fuel, technology_id, scheduled_outage_rate, \
 forced_outage_rate, min_build_capacity, \
-CASE WHEN heat_rate>0 THEN TO_CHAR(heat_rate::real, '999D9') ELSE '.' END, '.', \
+CASE WHEN gi.heat_rate>0 THEN TO_CHAR(gi.heat_rate::real, '999D9') ELSE '.' END, '.', \
 CASE WHEN carbon_content_without_carbon_accounting>0 THEN carbon_sequestered/carbon_content_without_carbon_accounting ELSE 0 END, \
 '.', \
-storage_efficiency, CASE WHEN max_store_rate > 0 THEN TO_CHAR(max_store_rate::real, '999D9') ELSE '.' END
-FROM chile.generator_info_v2 
-JOIN chile.fuel_info USING (fuel) 
+storage_efficiency, CASE WHEN max_store_rate > 0 THEN TO_CHAR(max_store_rate::real, '999D9') ELSE '.' END \
+FROM chile.generator_info_v2 gi \
+LEFT OUTER JOIN chile.new_projects_v4 np USING (technology_id) \
+JOIN chile.fuel_info fi USING (fuel) \
+LEFT OUTER JOIN chile.new_projects_scenarios ps USING (project_id) \
+WHERE (ps.new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID \
+OR gi.technology_id IN (SELECT technology_id FROM chile.existing_plants_wo_hydro)) \
 ORDER BY technology_id;" >> generator_info.tab
 
 #A fixed_o_m of 0 is specified for all technologies, since in the
 #Chilean DB that datus is specified per project
 #(and in the Pyomo implementation project info overwrites generic technological parameters)
 #I don't know how the cost is sampled for each period, because this WHERE clause results in more than one cost per period. To solve this, I simply averaged the results of the query.
+#This code only writes out the costs for the technologies that will be considered in the simulation
 echo '	gen_new_build_costs.tab...'
 echo -e 'generation_technology\tinvestment_period\tg_overnight_cost\tg_fixed_o_m' >> gen_new_build_costs.tab
 $connection_string -A -t -F  $'\t' -c  "SELECT gc.technology, \
 period_start, AVG(gc.overnight_cost), gi.fixed_o_m
-FROM chile.generator_info_v2 gi 
+FROM chile.generator_info_v2 gi
+LEFT OUTER JOIN chile.new_projects_v4 np USING (technology)
+LEFT OUTER JOIN chile.new_projects_scenarios ps USING (project_id)
 JOIN chile.generator_costs_yearly gc USING (technology), chile.training_set_periods
 WHERE year >= period_start
 AND year <= period_end
@@ -468,18 +475,9 @@ AND period_start >= $present_year \
 AND	period_start >= gi.min_build_year \
 AND training_set_id=$TRAINING_SET_ID \
 AND overnight_cost_id=$OVERNIGHT_COST_ID
+AND ps.new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID
 GROUP BY gc.technology, period_start, gi.fixed_o_m
 ORDER BY technology, period_start;">>gen_new_build_costs.tab
-
-#Eliminated current costs to avoid error in loading inputs to Pyomo.
-# UNION
-# SELECT gc.technology, year, gc.overnight_cost, gi.fixed_o_m
-# FROM chile.generator_info_v2 gi 
-# JOIN chile.generator_costs_yearly gc USING (technology), chile.training_set_periods
-# WHERE year = $present_year
-# AND training_set_id=$TRAINING_SET_ID \
-# AND overnight_cost_id=$OVERNIGHT_COST_ID
-
 
 
 ########################################################
@@ -499,7 +497,9 @@ echo 'param discount_rate := .07;'>>financials.dat
 
 #For some reason, only certain existing wind plants and RoR plants were taken into account in the original script. I will leave them like that to validate the model first.
 
-#The second UNION incorporates the capacity factors from new 
+#The second UNION incorporates the capacity factors from new
+
+#Pyomo will raise an error if a capacity factor is defined for a project on a timepoint when it is no longer operational (i.e. Canela 1 was built on 2007 and has a 30 year max age, so for tp's ocurring later than 2037, its capacity factor must not be written in the table). 
 echo '	variable_capacity_factors.tab... inserting non-RoR'
 echo -e 'PROJECT\ttimepoint\tproj_max_capacity_factor' >>variable_capacity_factors.tab
 $connection_string -A -t -F  $'\t' -c  "

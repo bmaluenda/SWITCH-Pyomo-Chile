@@ -181,18 +181,18 @@ def define_components(mod):
     mod.trans_lz2 = Param(mod.TRANSMISSION_LINES, within=mod.LOAD_ZONES)
     mod.min_data_check('TRANSMISSION_LINES', 'trans_lz1', 'trans_lz2')
     mod.trans_dbid = Param(mod.TRANSMISSION_LINES, default=lambda m, tx: tx)
-    mod.trans_length_km = Param(mod.TRANSMISSION_LINES, within=PositiveReals)
+    mod.trans_length_km = Param(mod.TRANSMISSION_LINES, within=NonNegativeReals)
     mod.trans_efficiency = Param(
         mod.TRANSMISSION_LINES,
         within=PositiveReals,
-        validate=lambda m, val, tx: val <= 1)
+        validate=lambda m, val, tx: 0 <= val <= 1)
     mod.EXISTING_TRANS_BLD_YRS = Set(
         dimen=2,
         initialize=lambda m: set(
             (tx, 'Legacy') for tx in m.TRANSMISSION_LINES))
     mod.existing_trans_cap = Param(
         mod.TRANSMISSION_LINES,
-        within=PositiveReals)
+        within=NonNegativeReals)
     mod.min_data_check(
         'trans_length_km', 'trans_efficiency', 'EXISTING_TRANS_BLD_YRS',
         'existing_trans_cap')
