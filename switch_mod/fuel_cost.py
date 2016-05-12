@@ -72,11 +72,11 @@ def define_components(mod):
     mod.Fuel_Costs_TP = Expression(
         mod.TIMEPOINTS,
         rule=lambda m, t: sum(
-            m.ProjFuelUseRate[proj, t, f] 
-                * m.fuel_cost[(m.proj_load_zone[proj], f, m.tp_period[t])]
+            m.ProjFuelUseRate[proj, t2, f] 
+                * m.fuel_cost[(m.proj_load_zone[proj], f, m.tp_period[t2])]
             for (proj, t2, f) in m.PROJ_FUEL_DISPATCH_POINTS
             if((t2 == t) and (
-                (m.proj_load_zone[proj], f, m.tp_period[t]) in
+                (m.proj_load_zone[proj], f, m.tp_period[t2]) in
                 m.FUEL_AVAILABILITY))))
     mod.cost_components_tp.append('Fuel_Costs_TP')
 
