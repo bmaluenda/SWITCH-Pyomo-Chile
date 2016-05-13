@@ -1,0 +1,5 @@
+param fuel_cost := 
+ South LNG 2017 12
+ South LNG 2016 12
+ East Coal 2017 2
+;

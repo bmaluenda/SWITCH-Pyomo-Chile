@@ -1,0 +1,12 @@
+PROJECT	timepoint	proj_max_capacity_factor
+Eolico	TP1	0.5
+SolarPV	TP1	0.2
+Eolico TP2	0.5
+SolarPV	TP2	0.2
+Eolico TP3	0.5
+SolarPV	TP3	0.2
+Represa	TP1	1
+Represa	TP2	0.8
+Represa	TP3	0.5
+SolarPVConstruccion	TP2	1
+SolarPVConstruccion	TP3	1

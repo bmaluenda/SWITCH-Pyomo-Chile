@@ -1,0 +1,1 @@
+param g_full_load_heat_rate := CoalCaro 10 CCGT 5 CoalCheap 10;

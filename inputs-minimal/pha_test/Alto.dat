@@ -1,0 +1,5 @@
+param g_full_load_heat_rate := CoalCaro 15 CCGT 5 CoalCheap 10;
+param g_overnight_cost := 
+ CoalCaro 2017 300000
+ CoalCheap 2017 3000
+;

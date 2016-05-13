@@ -1,0 +1,7 @@
+generation_technology	g_max_age	g_is_variable	g_is_baseload	g_is_flexible_baseload	g_is_cogen	g_competes_for_space	g_variable_o_m	g_energy_source	g_dbid	g_scheduled_outage_rate	g_forced_outage_rate	g_min_build_capacity	g_full_load_heat_rate	g_unit_size	g_ccs_capture_efficiency	g_ccs_energy_load	g_storage_efficiency	g_store_to_release_ratio
+Wind_Turbine	20	1	0	0	0	0	0	Wind	.	0	0	.	.	.	.	.	.	.
+PV_Panels	20	1	0	0	0	0	0	Solar	.	0	0	.	.	.	.	.	.	.
+CCGT	20	0	0	0	0	0	3	LNG	.	0	0	.	7	.	.	.	.	.
+CA	20	0	0	0	0	0	10	LNG	.	0	0	.	20	.	.	.	.	.
+Coal	20	0	1	0	0	0	2	Coal	.	0	0	.	5	.	.	.	.	.
+Dam	20	1	0	0	0	0	0	Water	.	0	0	.	.	.	.	.	.	.

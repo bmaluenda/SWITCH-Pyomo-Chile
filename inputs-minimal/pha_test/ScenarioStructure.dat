@@ -1,0 +1,49 @@
+param ScenarioBasedData := False ;
+
+set Stages := Investment Operation;
+
+set Nodes := RootNode 
+    Bajo
+    Medio
+    Alto;
+
+param NodeStage := RootNode Investment
+    Bajo Operation
+    Medio Operation
+    Alto Operation
+;
+
+set Children[RootNode] := 
+    Bajo
+    Medio
+    Alto;
+
+param ConditionalProbability := RootNode 1.0
+    Bajo 0.333333333333
+    Medio 0.333333333333
+    Alto 0.333333333333;
+
+set Scenarios :=  
+    Scenario_Bajo
+    Scenario_Medio
+    Scenario_Alto;
+
+param ScenarioLeafNode := 
+    Scenario_Bajo Bajo
+    Scenario_Medio Medio
+    Scenario_Alto Alto;
+
+set StageVariables[Investment] := 
+    BuildProj[*,*]
+;
+
+set StageVariables[Operation] := 
+    DispatchProj[*,*]
+    ProjFuelUseRate[*,*,*]
+;
+
+param StageCostVariable := 
+    Investment InvestCost
+    Operation OperateCost
+;
+

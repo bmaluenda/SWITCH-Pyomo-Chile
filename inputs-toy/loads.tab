@@ -1,0 +1,10 @@
+LOAD_ZONE	TIMEPOINT	lz_demand_mw
+West	TP1	200
+East	TP1	100
+South	TP1	0
+West	TP2	300
+East	TP2	300
+South	TP2	50
+West	TP3	300
+East	TP3	300
+South	TP3	100

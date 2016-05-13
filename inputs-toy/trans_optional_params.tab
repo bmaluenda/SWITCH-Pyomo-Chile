@@ -1,0 +1,4 @@
+TRANSMISSION_LINE	trans_dbid	trans_derating_factor	trans_terrain_multiplier	trans_new_build_allowed
+L1	.	.	.	0
+L2	.	.	.	0
+L3	.	.	.	0

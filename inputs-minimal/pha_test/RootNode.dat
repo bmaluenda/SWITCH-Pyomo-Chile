@@ -1,0 +1,69 @@
+set TIMESERIES := TS1 TS2;
+param ts_scale_to_period := TS2 182.5 TS1 365;
+param ts_duration_of_tp := TS2 24 TS1 24;
+param tp_timestamp := TP3 3 TP2 2 TP1 1;
+set LOAD_ZONES := Unica;
+param proj_gen_tech := TurbinaVaporCheap "CoalCheap" TurbinaVaporCaro "CoalCaro" TurbinaGas "CCGT";
+param proj_capacity_limit_mw := TurbinaVaporCheap 300 TurbinaVaporCaro 300 TurbinaGas 200;
+set GEN_TECH_WITH_UNIT_SIZES := ;
+param g_competes_for_space := CoalCaro 0 CCGT 0 CoalCheap 0;
+param ts_num_tps := TS2 2 TS1 1;
+param discount_rate := 0.07;
+set EXISTING_PROJ_BUILDYEARS := ('TurbinaGas', 2010);
+set PROJECTS := TurbinaGas TurbinaVaporCheap TurbinaVaporCaro;
+param lz_demand_mw := 
+ Unica TP3 400
+ Unica TP1 200
+ Unica TP2 300
+;
+param g_overnight_cost := 
+ CoalCaro 2017 3000
+ CoalCheap 2017 3000
+;
+set FUELS := LNG Coal;
+param g_max_age := CoalCaro 20 CCGT 20 CoalCheap 20;
+set FUEL_AVAILABILITY := ('Unica', 'LNG', 2016) ('Unica', 'LNG', 2017) ('Unica', 'Coal', 2017);
+param interest_rate := 0.07;
+param ts_period := TS2 2017 TS1 2016;
+param g_is_cogen := CoalCaro 0 CCGT 0 CoalCheap 0;
+param period_end := 2016 2016 2017 2017;
+param proj_connect_cost_per_mw := TurbinaVaporCheap 1000 TurbinaVaporCaro 1000 TurbinaGas 1000;
+param g_variable_o_m := CoalCaro 10 CCGT 5 CoalCheap 5;
+param g_energy_source := CoalCaro "Coal" CCGT "LNG" CoalCheap "Coal";
+param fuel_cost := 
+ Unica LNG 2016 5
+ Unica Coal 2017 10
+ Unica LNG 2017 5
+;
+set GENERATION_TECHNOLOGIES := CCGT CoalCheap CoalCaro;
+param proj_overnight_cost := 
+ TurbinaGas 2010 3000
+;
+param g_is_flexible_baseload := CoalCaro 0 CCGT 0 CoalCheap 0;
+param g_scheduled_outage_rate := CoalCaro 0 CCGT 0 CoalCheap 0;
+param g_fixed_o_m := 
+ CoalCaro 2017 1000
+ CoalCheap 2017 1000
+;
+param tp_ts := TP3 "TS2" TP2 "TS2" TP1 "TS1";
+param period_start := 2016 2016 2017 2017;
+set NEW_GENERATION_BUILDYEARS := ('CoalCheap', 2017) ('CoalCaro', 2017);
+set GEN_TECH_STORAGE := ;
+set GEN_TECH_CCS := ;
+param g_full_load_heat_rate := CoalCaro 10 CCGT 5 CoalCheap 10;
+param g_is_variable := CoalCaro 0 CCGT 0 CoalCheap 0;
+param base_financial_year := 2016;
+set TIMEPOINTS := TP1 TP2 TP3;
+param proj_load_zone := TurbinaVaporCheap "Unica" TurbinaVaporCaro "Unica" TurbinaGas "Unica";
+set PERIODS := 2016 2017;
+param f_co2_intensity := Coal 1 LNG 1;
+param proj_existing_cap := 
+ TurbinaGas 2010 200
+;
+set PROJECTS_CAP_LIMITED := TurbinaVaporCheap TurbinaVaporCaro TurbinaGas;
+param f_upstream_co2_intensity := Coal 1 LNG 1;
+param g_is_baseload := CoalCaro 0 CCGT 0 CoalCheap 0;
+param proj_fixed_om := 
+ TurbinaGas 2010 1000
+;
+param g_forced_outage_rate := CoalCaro 0 CCGT 0 CoalCheap 0;

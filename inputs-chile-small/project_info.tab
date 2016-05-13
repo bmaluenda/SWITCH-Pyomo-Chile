@@ -1,5 +1,5 @@
 PROJECT	proj_gen_tech	proj_load_zone	proj_connect_cost_per_mw	proj_variable_om	proj_full_load_heat_rate	proj_forced_outage_rate	proj_scheduled_outage_rate	proj_dbid	proj_capacity_limit_mw
-  45	Bio_Gas	S4	56874.5728854299	0.01085	  13.6	.	.	  45	   14.0
+  45	Bio_Gas	S4	6028.70472585557	0.01085	  13.6	.	.	  45	   14.0
 Loma_Los_Colorados	Bio_Gas_Internal_Combustion_Engine_EP	S9	99048.565	0	  15.4	.	.	SIC145	   2.0
 Loma_Los_Colorados_II	Bio_Gas_Internal_Combustion_Engine_EP	S9	99048.565	16.95	  15.4	.	.	SIC146	   9.8
 Arauco	Bio_Liquid_Steam_Turbine_Cogen_EP	S10	99048.565	0	  77.6	.	.	SIC87	  30.1
@@ -8,16 +8,16 @@ Constitucion_A.	Bio_Liquid_Steam_Turbine_Cogen_EP	S14	99048.565	0	  87.3	.	.	SIC
 Licanten	Bio_Liquid_Steam_Turbine_Cogen_EP	S8	99048.565	0	 123.6	.	.	SIC156	   4.0
 Nueva_Aldea_3	Bio_Liquid_Steam_Turbine_Cogen_EP	S1	99048.565	0	  50.5	.	.	SIC159	  49.0
 Valdivia	Bio_Liquid_Steam_Turbine_Cogen_EP	S1	99048.565	0	  58.9	.	.	SIC107	  61.0
-  46	Biomass_Steam_Turbine	S1	363511.597988103	4.480182	  10.5	.	.	  46	   22.0
-  47	Biomass_Steam_Turbine	S1	613864.69268627	4.480182	  10.5	.	.	  47	    7.0
-  48	Biomass_Steam_Turbine	S10	133239.680028627	4.480182	  10.5	.	.	  48	   31.0
-  49	Biomass_Steam_Turbine	S10	61681.1978063869	4.480182	  10.5	.	.	  49	    3.0
-  50	Biomass_Steam_Turbine	S10	7757.78622989928	4.480182	  10.5	.	.	  50	   20.0
-  51	Biomass_Steam_Turbine	S14	14708.1686325339	4.480182	  10.5	.	.	  51	   41.0
-  52	Biomass_Steam_Turbine	S18	295364.654333048	4.480182	  10.5	.	.	  52	   40.0
-  53	Biomass_Steam_Turbine	S18	677468.153367822	4.480182	  10.5	.	.	  53	   10.0
-  54	Biomass_Steam_Turbine	S6	74136.4900982788	4.480182	  10.5	.	.	  54	   35.0
-  55	Biomass_Steam_Turbine	S8	150580.312693983	4.480182	  10.5	.	.	  55	    7.0
+  46	Biomass_Steam_Turbine	S1	38532.2293867389	4.480182	  10.5	.	.	  46	   22.0
+  47	Biomass_Steam_Turbine	S1	65069.6574247447	4.480182	  10.5	.	.	  47	    7.0
+  48	Biomass_Steam_Turbine	S10	14123.4060830345	4.480182	  10.5	.	.	  48	   31.0
+  49	Biomass_Steam_Turbine	S10	6538.20696747701	4.480182	  10.5	.	.	  49	    3.0
+  50	Biomass_Steam_Turbine	S10	822.325340369324	4.480182	  10.5	.	.	  50	   20.0
+  51	Biomass_Steam_Turbine	S14	1559.06587504859	4.480182	  10.5	.	.	  51	   41.0
+  52	Biomass_Steam_Turbine	S18	31308.6533593031	4.480182	  10.5	.	.	  52	   40.0
+  53	Biomass_Steam_Turbine	S18	71811.6242569891	4.480182	  10.5	.	.	  53	   10.0
+  54	Biomass_Steam_Turbine	S6	7858.46795041755	4.480182	  10.5	.	.	  54	   35.0
+  55	Biomass_Steam_Turbine	S8	15961.5131455622	4.480182	  10.5	.	.	  55	    7.0
 Cabrero	Bio_Solid_Steam_Turbine_Cogen_EP	S1	99048.565	2.76	  51.8	.	.	SIC166	  11.1
 Constitucion	Bio_Solid_Steam_Turbine_EP	S14	99048.565	0	  61.8	.	.	SIC161	  11.1
 Energia_Pacifico	Bio_Solid_Steam_Turbine_EP	S4	99048.565	2.1	  61.8	.	.	SIC164	  15.6
@@ -25,35 +25,35 @@ Escuadron_(ex_FPC)	Bio_Solid_Steam_Turbine_EP	S10	99048.565	2.4	  61.8	.	.	SIC16
 Laja	Bio_Solid_Steam_Turbine_EP	S1	99048.565	0	  61.8	.	.	SIC160	  12.7
 Lautaro-Comasa	Bio_Solid_Steam_Turbine_EP	S1	99048.565	8.5	  50.5	.	.	SIC163	  25.0
 Nueva_Aldea	Bio_Solid_Steam_Turbine_EP	S1	99048.565	0	  36.8	.	.	SIC158	  14.0
-  56	CCGT	S4	154973.502389796	2.6739825	   6.5	.	.	  56	.
-  57	CCGT	S8	185244.992317776	2.6739825	   6.5	.	.	  57	.
-  58	CCGT	S9	2500.76464863576	2.6739825	   6.5	.	.	  58	.
+  56	CCGT	S4	16427.1912533184	2.6739825	   6.5	.	.	  56	.
+  57	CCGT	S8	19635.9691856842	2.6739825	   6.5	.	.	  57	.
+  58	CCGT	S9	265.081052755391	2.6739825	   6.5	.	.	  58	.
 ATACAMA	CCGT_EP	S22	99048.565	4.39	   7.5	.	.	SING1	 780.6
 Nehuenco	CCGT_EP	S13	99048.565	0	   6.8	.	.	SIC94	 368.4
 Nehuenco_II	CCGT_EP	S13	99048.565	0	   6.2	.	.	SIC95	 398.3
 SALTA	CCGT_EP	S21	99048.565	0.35	   5.5	.	.	SING14	 642.8
 San_Isidro	CCGT_EP	S13	99048.565	3.345	   9.3	.	.	SIC96	 379.0
 San_Isidro_II	CCGT_EP	S13	99048.565	3.71	   6.3	.	.	SIC97	 353.0
-  59	Coal_Steam_Turbine	S1	262389.343402138	4.224366125	   8.8	.	.	  59	.
-  60	Coal_Steam_Turbine	S10	140118.989783206	4.224366125	   8.8	.	.	  60	.
-  61	Coal_Steam_Turbine	S10	88449.0136959089	4.224366125	   8.8	.	.	  61	.
-  62	Coal_Steam_Turbine	S10	108208.978960356	4.224366125	   8.8	.	.	  62	.
-  63	Coal_Steam_Turbine	S13	183281.212192253	4.224366125	   8.8	.	.	  63	.
-  64	Coal_Steam_Turbine	S13	159776.595400281	4.224366125	   8.8	.	.	  64	.
-  65	Coal_Steam_Turbine	S13	187524.466457241	4.224366125	   8.8	.	.	  65	.
-  66	Coal_Steam_Turbine	S14	266629.300420818	4.224366125	   8.8	.	.	  66	.
-  67	Coal_Steam_Turbine	S15	282277.690110995	4.224366125	   8.8	.	.	  67	.
-  68	Coal_Steam_Turbine	S15	266384.753593075	4.224366125	   8.8	.	.	  68	.
-  69	Coal_Steam_Turbine	S16	542335.40871302	4.224366125	   8.8	.	.	  69	.
-  70	Coal_Steam_Turbine	S17	1106137.36994529	4.224366125	   8.8	.	.	  70	.
-  71	Coal_Steam_Turbine	S19	213938.256546044	4.224366125	   8.8	.	.	  71	.
-  72	Coal_Steam_Turbine	S19	218808.414006867	4.224366125	   8.8	.	.	  72	.
-  73	Coal_Steam_Turbine	S22	9508.2204225113	4.224366125	   8.8	.	.	  73	.
-  74	Coal_Steam_Turbine	S22	72214.9458202253	4.224366125	   8.8	.	.	  74	.
-  75	Coal_Steam_Turbine	S22	40135.5410164999	4.224366125	   8.8	.	.	  75	.
-  76	Coal_Steam_Turbine	S7	234715.783672058	4.224366125	   8.8	.	.	  76	.
-  77	Coal_Steam_Turbine	S7	308430.779119452	4.224366125	   8.8	.	.	  77	.
-  78	Coal_Steam_Turbine	S7	267715.682028975	4.224366125	   8.8	.	.	  78	.
+  59	Coal_Steam_Turbine	S1	27813.2704006266	4.224366125	   8.8	.	.	  59	.
+  60	Coal_Steam_Turbine	S10	14852.6129170199	4.224366125	   8.8	.	.	  60	.
+  61	Coal_Steam_Turbine	S10	9375.59545176634	4.224366125	   8.8	.	.	  61	.
+  62	Coal_Steam_Turbine	S10	11470.1517697977	4.224366125	   8.8	.	.	  62	.
+  63	Coal_Steam_Turbine	S13	19427.8084923788	4.224366125	   8.8	.	.	  63	.
+  64	Coal_Steam_Turbine	S13	16936.3191124298	4.224366125	   8.8	.	.	  64	.
+  65	Coal_Steam_Turbine	S13	19877.5934444675	4.224366125	   8.8	.	.	  65	.
+  66	Coal_Steam_Turbine	S14	28262.7058446067	4.224366125	   8.8	.	.	  66	.
+  67	Coal_Steam_Turbine	S15	29921.4351517655	4.224366125	   8.8	.	.	  67	.
+  68	Coal_Steam_Turbine	S15	28236.7838808659	4.224366125	   8.8	.	.	  68	.
+  69	Coal_Steam_Turbine	S16	57487.5533235801	4.224366125	   8.8	.	.	  69	.
+  70	Coal_Steam_Turbine	S17	117250.561214201	4.224366125	   8.8	.	.	  70	.
+  71	Coal_Steam_Turbine	S19	22677.4551938807	4.224366125	   8.8	.	.	  71	.
+  72	Coal_Steam_Turbine	S19	23193.6918847279	4.224366125	   8.8	.	.	  72	.
+  73	Coal_Steam_Turbine	S22	1007.8713647862	4.224366125	   8.8	.	.	  73	.
+  74	Coal_Steam_Turbine	S22	7654.78425694388	4.224366125	   8.8	.	.	  74	.
+  75	Coal_Steam_Turbine	S22	4254.36734774899	4.224366125	   8.8	.	.	  75	.
+  76	Coal_Steam_Turbine	S7	24879.8730692382	4.224366125	   8.8	.	.	  76	.
+  77	Coal_Steam_Turbine	S7	32693.6625866619	4.224366125	   8.8	.	.	  77	.
+  78	Coal_Steam_Turbine	S7	28377.8622950713	4.224366125	   8.8	.	.	  78	.
 Bocamina	Coal_Steam_Turbine_EP	S10	99048.565	1	   8.6	.	.	SIC79	 128.0
 Guacolda_1	Coal_Steam_Turbine_EP	S15	99048.565	1	   8.2	.	.	SIC80	 152.0
 Guacolda_2	Coal_Steam_Turbine_EP	S15	99048.565	1	   8.2	.	.	SIC81	 152.0
@@ -71,12 +71,12 @@ TERMOELeCTRICA_TARAPACa	Coal_Steam_Turbine_EP	S19	99048.565	1.4	  10.1	.	.	SING2
 TERMOELeCTRICA_TOCOPILLA	Coal_Steam_Turbine_EP	S20	99048.565	2.485	  10.7	.	.	SING23	 439.6
 Ventanas_1	Coal_Steam_Turbine_EP	S9	99048.565	2.18	   9.4	.	.	SIC76	 120.0
 Ventanas_2	Coal_Steam_Turbine_EP	S9	99048.565	1.38	   9.0	.	.	SIC77	 220.0
-  79	DistillateFuelOil_Combustion_Turbine	1	919344.544690723	4.197648	  11.9	.	.	  79	    4.8
-  80	DistillateFuelOil_Combustion_Turbine	S1	71843.6910297322	4.197648	  11.9	.	.	  80	  100.0
-  81	DistillateFuelOil_Combustion_Turbine	S11	117725.048205613	4.197648	  11.9	.	.	  81	   18.0
-  82	DistillateFuelOil_Combustion_Turbine	S17	10490.7492256811	4.197648	  11.9	.	.	  82	   30.0
-  83	DistillateFuelOil_Combustion_Turbine	S18	417781.751026295	4.197648	  11.9	.	.	  83	    5.0
-  84	DistillateFuelOil_Combustion_Turbine	S5	689.008178078036	4.197648	  11.9	.	.	  84	   19.0
+  79	DistillateFuelOil_Combustion_Turbine	1	97450.5217372167	4.197648	  11.9	.	.	  79	    4.8
+  80	DistillateFuelOil_Combustion_Turbine	S1	7615.43124915161	4.197648	  11.9	.	.	  80	  100.0
+  81	DistillateFuelOil_Combustion_Turbine	S11	12478.855109795	4.197648	  11.9	.	.	  81	   18.0
+  82	DistillateFuelOil_Combustion_Turbine	S17	1112.0194179222	4.197648	  11.9	.	.	  82	   30.0
+  83	DistillateFuelOil_Combustion_Turbine	S18	44284.8656087873	4.197648	  11.9	.	.	  83	    5.0
+  84	DistillateFuelOil_Combustion_Turbine	S5	73.0348668762718	4.197648	  11.9	.	.	  84	   19.0
 Antilhue_TG	DistillateFuelOil_Combustion_Turbine_EP	S18	99048.565	2.9	   9.9	.	.	SIC101	 101.3
 Colmito	DistillateFuelOil_Combustion_Turbine_EP	S9	99048.565	20	  12.8	.	.	SIC150	  58.0
 D._Almagro	DistillateFuelOil_Combustion_Turbine_EP	S17	99048.565	6.63	  14.5	.	.	SIC85	  23.8
@@ -99,9 +99,9 @@ TERMOELeCTRICA_TARAPACa_DIE	DistillateFuelOil_Combustion_Turbine_EP	S19	99048.56
 TERMOELeCTRICA_TOCOPILLA_DIE	DistillateFuelOil_Combustion_Turbine_EP	S20	99048.565	1.09	  12.6	.	.	SING24	 124.6
 TG_Coronel	DistillateFuelOil_Combustion_Turbine_EP	S10	99048.565	9.8	   9.7	.	.	SIC102	  46.7
 Tierra_Amarilla	DistillateFuelOil_Combustion_Turbine_EP	S16	99048.565	21.68	  10.3	.	.	SIC125	 165.0
-  85	DistillateFuelOil_Internal_Combustion_Engine	S15	18924.8003664671	4.197648	  10.1	.	.	  85	   67.0
-  86	DistillateFuelOil_Internal_Combustion_Engine	S19	5809.36795792022	4.197648	  10.1	.	.	  86	   38.0
-  87	DistillateFuelOil_Internal_Combustion_Engine	S22	120573.438597066	4.197648	  10.1	.	.	  87	   31.0
+  85	DistillateFuelOil_Internal_Combustion_Engine	S15	2006.02883884551	4.197648	  10.1	.	.	  85	   67.0
+  86	DistillateFuelOil_Internal_Combustion_Engine	S19	615.793003539544	4.197648	  10.1	.	.	  86	   38.0
+  87	DistillateFuelOil_Internal_Combustion_Engine	S22	12780.784491289	4.197648	  10.1	.	.	  87	   31.0
 Ancud	DistillateFuelOil_Internal_Combustion_Engine_EP	S2	99048.565	0	  10.1	.	.	SIC110	   3.3
 Calle_Calle	DistillateFuelOil_Internal_Combustion_Engine_EP	S18	99048.565	15	   8.0	.	.	SIC167	  12.8
 Canete	DistillateFuelOil_Internal_Combustion_Engine_EP	S10	99048.565	0	  10.1	.	.	SIC112	   3.0
@@ -147,15 +147,15 @@ Termopacifico	DistillateFuelOil_Internal_Combustion_Engine_EP	S16	99048.565	22.4
 Totoral	DistillateFuelOil_Internal_Combustion_Engine_EP	S5	99048.565	25.86	  10.1	.	.	SIC139	   3.0
 Traigen	DistillateFuelOil_Internal_Combustion_Engine_EP	S1	99048.565	0	  10.2	.	.	SIC115	   3.0
 Trapen	DistillateFuelOil_Internal_Combustion_Engine_EP	S2	99048.565	28.3	   9.4	.	.	SIC126	  81.0
-  88	Gas_Combustion_Turbine	S1	412691.480986834	3.693123	   8.6	.	.	  88	.
-  89	Gas_Combustion_Turbine	S17	1106767.83302424	3.693123	   8.6	.	.	  89	.
-  90	Gas_Combustion_Turbine	S22	72214.9458202253	3.693123	   8.6	.	.	  90	.
-  91	Gas_Combustion_Turbine	S22	42768.8625493063	3.693123	   8.6	.	.	  91	.
-  92	Gas_Combustion_Turbine	S4	25217.573003275	3.693123	   8.6	.	.	  92	.
-  93	Gas_Combustion_Turbine	S4	76124.6417662136	3.693123	   8.6	.	.	  93	.
-  94	Gas_Combustion_Turbine	S9	101657.360320637	3.693123	   8.6	.	.	  94	.
-  95	Gas_Combustion_Turbine	S9	12945.5878712922	3.693123	   8.6	.	.	  95	.
-  96	Gas_Combustion_Turbine	S9	3137.40098732712	3.693123	   8.6	.	.	  96	.
+  88	Gas_Combustion_Turbine	S1	43745.2969846044	3.693123	   8.6	.	.	  88	.
+  89	Gas_Combustion_Turbine	S17	117317.390300569	3.693123	   8.6	.	.	  89	.
+  90	Gas_Combustion_Turbine	S22	7654.78425694388	3.693123	   8.6	.	.	  90	.
+  91	Gas_Combustion_Turbine	S22	4533.49943022647	3.693123	   8.6	.	.	  91	.
+  92	Gas_Combustion_Turbine	S4	2673.06273834715	3.693123	   8.6	.	.	  92	.
+  93	Gas_Combustion_Turbine	S4	8069.21202721864	3.693123	   8.6	.	.	  93	.
+  94	Gas_Combustion_Turbine	S9	10775.6801939875	3.693123	   8.6	.	.	  94	.
+  95	Gas_Combustion_Turbine	S9	1372.23231435697	3.693123	   8.6	.	.	  95	.
+  96	Gas_Combustion_Turbine	S9	332.564504656675	3.693123	   8.6	.	.	  96	.
 Campanario	Gas_Combustion_Turbine_EP	S1	99048.565	0	  11.1	.	.	SIC104	 219.2
 Candelaria_1	Gas_Combustion_Turbine_EP	S4	99048.565	2.8	  11.1	.	.	SIC103	 269.5
 Nueva_Renca	Gas_Combustion_Turbine_EP	S6	99048.565	1.9	   7.4	.	.	SIC93	 379.0
@@ -165,98 +165,98 @@ Taltal_2	Gas_Combustion_Turbine_EP	S17	99048.565	3.19	  11.2	.	.	SIC99	 122.5
 Tapihue	Gas_Combustion_Turbine_EP	S9	99048.565	0	  12.8	.	.	SIC92	   6.4
 TERMOELeCTRICA_MEJILLONES_GNL	Gas_Combustion_Turbine_EP	S22	99048.565	4.65	   7.1	.	.	SING19	 250.8
 TERMOELeCTRICA_TOCOPILLA_GNL	Gas_Combustion_Turbine_EP	S20	99048.565	3.68	   9.5	.	.	SING25	 437.5
- 221	Geothermal	1	982660.42950645	3.4408605	.	.	.	 221	   20.0
- 222	Geothermal	1	506431.730609166	3.4408605	.	.	.	 222	   20.0
- 223	Geothermal	S1	1018846.06683627	3.4408605	.	.	.	 223	   40.0
- 224	Geothermal	S1	885306.724420199	3.4408605	.	.	.	 224	   40.0
- 225	Geothermal	S1	921279.285539388	3.4408605	.	.	.	 225	   40.0
- 226	Geothermal	S1	731761.53180396	3.4408605	.	.	.	 226	   20.0
- 227	Geothermal	S1	816388.099964437	3.4408605	.	.	.	 227	   40.0
- 228	Geothermal	S1	1016424.86446659	3.4408605	.	.	.	 228	   40.0
- 229	Geothermal	S1	956337.909446687	3.4408605	.	.	.	 229	   20.0
- 230	Geothermal	S1	1151993.07378161	3.4408605	.	.	.	 230	   20.0
- 231	Geothermal	S1	1223731.4455568	3.4408605	.	.	.	 231	   40.0
- 232	Geothermal	S18	950171.562829799	3.4408605	.	.	.	 232	   40.0
- 233	Geothermal	S18	1105229.76772913	3.4408605	.	.	.	 233	   40.0
- 234	Geothermal	S18	901701.31282607	3.4408605	.	.	.	 234	   40.0
- 235	Geothermal	S18	1170806.89707649	3.4408605	.	.	.	 235	   20.0
- 236	Geothermal	S18	1049910.08186332	3.4408605	.	.	.	 236	   20.0
- 237	Geothermal	S18	727430.035951412	3.4408605	.	.	.	 237	   20.0
- 238	Geothermal	S18	980347.257290262	3.4408605	.	.	.	 238	   20.0
- 239	Geothermal	S18	1120290.09508474	3.4408605	.	.	.	 239	   40.0
- 240	Geothermal	S18	1616451.50348923	3.4408605	.	.	.	 240	   40.0
- 241	Geothermal	S18	1144840.55046395	3.4408605	.	.	.	 241	   40.0
- 242	Geothermal	S18	685636.973453703	3.4408605	.	.	.	 242	   40.0
- 243	Geothermal	S18	1343584.24947691	3.4408605	.	.	.	 243	   40.0
- 244	Geothermal	S19	521565.721201835	3.4408605	.	.	.	 244	   20.0
- 245	Geothermal	S19	871473.644262845	3.4408605	.	.	.	 245	   40.0
- 246	Geothermal	S19	1265780.37829677	3.4408605	.	.	.	 246	   40.0
- 247	Geothermal	S19	1311294.78054769	3.4408605	.	.	.	 247	   40.0
- 248	Geothermal	S19	1111890.79464659	3.4408605	.	.	.	 248	   40.0
- 249	Geothermal	S19	1428359.46983862	3.4408605	.	.	.	 249	   20.0
- 250	Geothermal	S19	1560741.79484144	3.4408605	.	.	.	 250	   20.0
- 251	Geothermal	S19	951779.422493326	3.4408605	.	.	.	 251	   20.0
- 252	Geothermal	S19	738158.297827459	3.4408605	.	.	.	 252	   20.0
- 253	Geothermal	S19	1318183.6921025	3.4408605	.	.	.	 253	   20.0
- 254	Geothermal	S19	648789.326864085	3.4408605	.	.	.	 254	   20.0
- 255	Geothermal	S19	316580.485670423	3.4408605	.	.	.	 255	   20.0
- 256	Geothermal	S19	808507.451370378	3.4408605	.	.	.	 256	   40.0
- 257	Geothermal	S20	928032.662557544	3.4408605	.	.	.	 257	   20.0
- 258	Geothermal	S20	659142.829396599	3.4408605	.	.	.	 258	   40.0
- 259	Geothermal	S21	1427760.43838067	3.4408605	.	.	.	 259	   20.0
- 260	Geothermal	S21	1363605.63912654	3.4408605	.	.	.	 260	   40.0
- 261	Geothermal	S22	923930.022373481	3.4408605	.	.	.	 261	   20.0
- 262	Geothermal	S4	520058.517745083	3.4408605	.	.	.	 262	   20.0
- 263	Geothermal	S4	545421.854865707	3.4408605	.	.	.	 263	   40.0
- 264	Geothermal	S4	442180.187982135	3.4408605	.	.	.	 264	   20.0
- 265	Geothermal	S8	950944.442062151	3.4408605	.	.	.	 265	   40.0
- 266	Geothermal	S8	1024543.76935059	3.4408605	.	.	.	 266	   40.0
- 267	Geothermal	S8	591439.688609056	3.4408605	.	.	.	 267	   40.0
- 268	Geothermal	S8	844159.910100961	3.4408605	.	.	.	 268	   20.0
- 269	Geothermal	S8	713370.218782004	3.4408605	.	.	.	 269	   20.0
- 270	Geothermal	S8	844105.588112586	3.4408605	.	.	.	 270	   20.0
- 271	Geothermal	S8	949063.30929626	3.4408605	.	.	.	 271	   20.0
- 272	Geothermal	S8	783810.270824007	3.4408605	.	.	.	 272	   20.0
-   1	Wind	S14	263689.804018653	5.1360645	.	.	.	   1	 1000.0
-  11	Wind	S17	977160.296241082	5.1360645	.	.	.	  11	  600.0
-  12	Wind	S17	867703.262187322	5.1360645	.	.	.	  12	  217.9
-  15	Wind	S20	536876.302435639	5.1360645	.	.	.	  15	  224.3
-  16	Wind	S20	462102.804380539	5.1360645	.	.	.	  16	  234.4
-  19	Wind	S20	221769.851060523	5.1360645	.	.	.	  19	 1000.0
-   2	Wind	S15	287200.518793418	5.1360645	.	.	.	   2	  600.0
-  20	Wind	S20	183039.951311681	5.1360645	.	.	.	  20	  600.0
-  21	Wind	S20	107235.067016704	5.1360645	.	.	.	  21	  600.0
-  22	Wind	S20	261847.947565179	5.1360645	.	.	.	  22	  600.0
-  23	Wind	S21	492450.831756597	5.1360645	.	.	.	  23	   32.3
-  25	Wind	S21	504306.228771814	5.1360645	.	.	.	  25	   85.4
- 282	Wind	S17	358026.924476623	5.1360645	.	.	.	 282	  600.0
- 283	Wind	S18	933771.170916641	5.1360645	.	.	.	 283	  600.0
- 284	Wind	S18	430139.812015008	5.1360645	.	.	.	 284	  600.0
- 285	Wind	S17	867719.691605052	5.1360645	.	.	.	 285	   31.7
- 286	Wind	S1	405043.274452776	5.1360645	.	.	.	 286	  600.0
- 287	Wind	S18	423471.264806948	5.1360645	.	.	.	 287	  600.0
- 289	Wind	S18	286957.045485602	5.1360645	.	.	.	 289	  600.0
-  29	Wind	S22	321107.839751075	5.1360645	.	.	.	  29	  600.0
- 290	Wind	S18	398137.365402235	5.1360645	.	.	.	 290	  600.0
- 291	Wind	S18	614218.573403619	5.1360645	.	.	.	 291	  600.0
- 293	Wind	S12	591073.243326729	5.1360645	.	.	.	 293	  600.0
- 294	Wind	S12	844505.708489402	5.1360645	.	.	.	 294	  600.0
- 295	Wind	S12	1214011.96570585	5.1360645	.	.	.	 295	  600.0
- 296	Wind	S9	43216.4841625872	5.1360645	.	.	.	 296	  600.0
- 297	Wind	S3	208493.682931746	5.1360645	.	.	.	 297	  600.0
- 298	Wind	S13	609816.59979235	5.1360645	.	.	.	 298	  600.0
- 299	Wind	S7	354470.729513103	5.1360645	.	.	.	 299	  600.0
-   3	Wind	S15	446351.283453538	5.1360645	.	.	.	   3	 1000.0
- 300	Wind	S15	480398.95312095	5.1360645	.	.	.	 300	   68.4
- 301	Wind	S17	912425.065527072	5.1360645	.	.	.	 301	   71.6
-  31	Wind	S5	454639.758590327	5.1360645	.	.	.	  31	  600.0
-  32	Wind	S5	349868.512296041	5.1360645	.	.	.	  32	  600.0
-  33	Wind	S7	278683.815696443	5.1360645	.	.	.	  33	  600.0
-  34	Wind	S7	472866.20607154	5.1360645	.	.	.	  34	 1000.0
-   4	Wind	S15	401395.152626489	5.1360645	.	.	.	   4	  600.0
-   6	Wind	S17	1019144.97486959	5.1360645	.	.	.	   6	  600.0
-   7	Wind	S17	874878.518539081	5.1360645	.	.	.	   7	  600.0
-   8	Wind	S17	934054.807231797	5.1360645	.	.	.	   8	  293.3
+ 221	Geothermal	1	104162.005527684	3.4408605	.	.	.	 221	   20.0
+ 222	Geothermal	1	53681.7634445716	3.4408605	.	.	.	 222	   20.0
+ 223	Geothermal	S1	107997.683084645	3.4408605	.	.	.	 223	   40.0
+ 224	Geothermal	S1	93842.5127885411	3.4408605	.	.	.	 224	   40.0
+ 225	Geothermal	S1	97655.6042671751	3.4408605	.	.	.	 225	   40.0
+ 226	Geothermal	S1	77566.7223712197	3.4408605	.	.	.	 226	   20.0
+ 227	Geothermal	S1	86537.1385962303	3.4408605	.	.	.	 227	   40.0
+ 228	Geothermal	S1	107741.035633458	3.4408605	.	.	.	 228	   40.0
+ 229	Geothermal	S1	101371.818401349	3.4408605	.	.	.	 229	   20.0
+ 230	Geothermal	S1	122111.26582085	3.4408605	.	.	.	 230	   20.0
+ 231	Geothermal	S1	129715.533229021	3.4408605	.	.	.	 231	   40.0
+ 232	Geothermal	S18	100718.185659959	3.4408605	.	.	.	 232	   40.0
+ 233	Geothermal	S18	117154.355379288	3.4408605	.	.	.	 233	   40.0
+ 234	Geothermal	S18	95580.3391595634	3.4408605	.	.	.	 234	   40.0
+ 235	Geothermal	S18	124105.531090108	3.4408605	.	.	.	 235	   20.0
+ 236	Geothermal	S18	111290.468677512	3.4408605	.	.	.	 236	   20.0
+ 237	Geothermal	S18	77107.5838108497	3.4408605	.	.	.	 237	   20.0
+ 238	Geothermal	S18	103916.809272768	3.4408605	.	.	.	 238	   20.0
+ 239	Geothermal	S18	118750.750078983	3.4408605	.	.	.	 239	   40.0
+ 240	Geothermal	S18	171343.859369859	3.4408605	.	.	.	 240	   40.0
+ 241	Geothermal	S18	121353.098349179	3.4408605	.	.	.	 241	   40.0
+ 242	Geothermal	S18	72677.5191860926	3.4408605	.	.	.	 242	   40.0
+ 243	Geothermal	S18	142419.930444552	3.4408605	.	.	.	 243	   40.0
+ 244	Geothermal	S19	55285.9664473945	3.4408605	.	.	.	 244	   20.0
+ 245	Geothermal	S19	92376.2062918615	3.4408605	.	.	.	 245	   40.0
+ 246	Geothermal	S19	134172.720099458	3.4408605	.	.	.	 246	   40.0
+ 247	Geothermal	S19	138997.246738055	3.4408605	.	.	.	 247	   40.0
+ 248	Geothermal	S19	117860.424232539	3.4408605	.	.	.	 248	   40.0
+ 249	Geothermal	S19	151406.103802893	3.4408605	.	.	.	 249	   20.0
+ 250	Geothermal	S19	165438.630253192	3.4408605	.	.	.	 250	   20.0
+ 251	Geothermal	S19	100888.618784293	3.4408605	.	.	.	 251	   20.0
+ 252	Geothermal	S19	78244.7795697107	3.4408605	.	.	.	 252	   20.0
+ 253	Geothermal	S19	139727.471362865	3.4408605	.	.	.	 253	   20.0
+ 254	Geothermal	S19	68771.668647593	3.4408605	.	.	.	 254	   20.0
+ 255	Geothermal	S19	33557.5314810648	3.4408605	.	.	.	 255	   20.0
+ 256	Geothermal	S19	85701.78984526	3.4408605	.	.	.	 256	   40.0
+ 257	Geothermal	S20	98371.4622310996	3.4408605	.	.	.	 257	   20.0
+ 258	Geothermal	S20	69869.1399160395	3.4408605	.	.	.	 258	   40.0
+ 259	Geothermal	S21	151342.606468351	3.4408605	.	.	.	 259	   20.0
+ 260	Geothermal	S21	144542.197747413	3.4408605	.	.	.	 260	   40.0
+ 261	Geothermal	S22	97936.582371589	3.4408605	.	.	.	 261	   20.0
+ 262	Geothermal	S4	55126.2028809788	3.4408605	.	.	.	 262	   20.0
+ 263	Geothermal	S4	57814.716615765	3.4408605	.	.	.	 263	   40.0
+ 264	Geothermal	S4	46871.0999261063	3.4408605	.	.	.	 264	   20.0
+ 265	Geothermal	S8	100800.110858588	3.4408605	.	.	.	 265	   40.0
+ 266	Geothermal	S8	108601.639551162	3.4408605	.	.	.	 266	   40.0
+ 267	Geothermal	S8	62692.6069925599	3.4408605	.	.	.	 267	   40.0
+ 268	Geothermal	S8	89480.9504707018	3.4408605	.	.	.	 268	   20.0
+ 269	Geothermal	S8	75617.2431908924	3.4408605	.	.	.	 269	   20.0
+ 270	Geothermal	S8	89475.1923399341	3.4408605	.	.	.	 270	   20.0
+ 271	Geothermal	S8	100600.710785404	3.4408605	.	.	.	 271	   20.0
+ 272	Geothermal	S8	83083.8887073448	3.4408605	.	.	.	 272	   20.0
+   1	Wind	S14	27951.1192259772	5.1360645	.	.	.	   1	 1000.0
+  11	Wind	S17	103578.991401555	5.1360645	.	.	.	  11	  600.0
+  12	Wind	S17	91976.5457918561	5.1360645	.	.	.	  12	  217.9
+  15	Wind	S20	56908.8880581777	5.1360645	.	.	.	  15	  224.3
+  16	Wind	S20	48982.8972643371	5.1360645	.	.	.	  16	  234.4
+  19	Wind	S20	23507.6042124154	5.1360645	.	.	.	  19	 1000.0
+   2	Wind	S15	30443.2549921023	5.1360645	.	.	.	   2	  600.0
+  20	Wind	S20	19402.2348390381	5.1360645	.	.	.	  20	  600.0
+  21	Wind	S20	11366.9171037706	5.1360645	.	.	.	  21	  600.0
+  22	Wind	S20	27755.882441909	5.1360645	.	.	.	  22	  600.0
+  23	Wind	S21	52199.7881661992	5.1360645	.	.	.	  23	   32.3
+  25	Wind	S21	53456.4602498123	5.1360645	.	.	.	  25	   85.4
+ 282	Wind	S17	37950.8539945221	5.1360645	.	.	.	 282	  600.0
+ 283	Wind	S18	98979.744117164	5.1360645	.	.	.	 283	  600.0
+ 284	Wind	S18	45594.8200735908	5.1360645	.	.	.	 284	  600.0
+ 285	Wind	S17	91978.2873101355	5.1360645	.	.	.	 285	   31.7
+ 286	Wind	S1	42934.5870919942	5.1360645	.	.	.	 286	  600.0
+ 287	Wind	S18	44887.9540695364	5.1360645	.	.	.	 287	  600.0
+ 289	Wind	S18	30417.4468214738	5.1360645	.	.	.	 289	  600.0
+  29	Wind	S22	34037.431013614	5.1360645	.	.	.	  29	  600.0
+ 290	Wind	S18	42202.5607326369	5.1360645	.	.	.	 290	  600.0
+ 291	Wind	S18	65107.1687807836	5.1360645	.	.	.	 291	  600.0
+ 293	Wind	S12	62653.7637926333	5.1360645	.	.	.	 293	  600.0
+ 294	Wind	S12	89517.6050998766	5.1360645	.	.	.	 294	  600.0
+ 295	Wind	S12	128685.26836482	5.1360645	.	.	.	 295	  600.0
+ 296	Wind	S9	4580.94732123424	5.1360645	.	.	.	 296	  600.0
+ 297	Wind	S3	22100.330390765	5.1360645	.	.	.	 297	  600.0
+ 298	Wind	S13	64640.5595779891	5.1360645	.	.	.	 298	  600.0
+ 299	Wind	S7	37573.8973283889	5.1360645	.	.	.	 299	  600.0
+   3	Wind	S15	47313.236046075	5.1360645	.	.	.	   3	 1000.0
+ 300	Wind	S15	50922.2890308207	5.1360645	.	.	.	 300	   68.4
+ 301	Wind	S17	96717.0569458696	5.1360645	.	.	.	 301	   71.6
+  31	Wind	S5	48191.8144105747	5.1360645	.	.	.	  31	  600.0
+  32	Wind	S5	37086.0623033803	5.1360645	.	.	.	  32	  600.0
+  33	Wind	S7	29540.4844638229	5.1360645	.	.	.	  33	  600.0
+  34	Wind	S7	50123.8178435832	5.1360645	.	.	.	  34	 1000.0
+   4	Wind	S15	42547.8861784078	5.1360645	.	.	.	   4	  600.0
+   6	Wind	S17	108029.367336177	5.1360645	.	.	.	   6	  600.0
+   7	Wind	S17	92737.1229651425	5.1360645	.	.	.	   7	  600.0
+   8	Wind	S17	99009.8095665705	5.1360645	.	.	.	   8	  293.3
 Canela_1	Wind_EP	S7	99048.565	0	.	.	.	SIC70	  18.2
 Canela_2	Wind_EP	S7	99048.565	0	.	.	.	SIC71	  60.0
 Lebu_(Cristoro)	Wind_EP	S10	99048.565	0	.	.	.	SIC72	   6.6

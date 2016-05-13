@@ -1,0 +1,122 @@
+param trans_lz2 := L2 "South" L3 "East" L1 "East";
+set TIMESERIES := TS1 TS2;
+param ts_scale_to_period := TS2 182.5 TS1 365;
+param ts_duration_of_tp := TS2 24 TS1 24;
+param tp_timestamp := TP3 3 TP2 2 TP1 1;
+set LOAD_ZONES := West East South;
+param proj_gen_tech := Eolico "Wind_Turbine" TurbinaGasCA "CA" SolarPV "PV_Panels" TurbinaVapor "Coal" TurbinaGas "CCGT" SolarPVConstruccion "PV_Panels" Represa "Dam";
+param trans_lifetime_yrs := 20;
+set GEN_TECH_WITH_UNIT_SIZES := ;
+param g_competes_for_space := Dam 0 CA 0 Coal 0 PV_Panels 0 Wind_Turbine 0 CCGT 0;
+param ts_num_tps := TS2 2 TS1 1;
+param discount_rate := 0.07;
+set EXISTING_PROJ_BUILDYEARS := ('Eolico', 2010) ('SolarPV', 2010) ('TurbinaGas', 2010) ('TurbinaGasCA', 2010) ('Represa', 2010) ('SolarPVConstruccion', 2017);
+param trans_fixed_o_m_fraction := 0.03;
+set PROJECTS := Eolico SolarPV TurbinaGas TurbinaGasCA TurbinaVapor Represa SolarPVConstruccion;
+param lz_demand_mw := 
+ East TP3 300
+ West TP3 300
+ South TP2 50
+ East TP2 300
+ West TP2 300
+ West TP1 200
+ South TP1 0
+ South TP3 100
+ East TP1 100
+;
+param g_overnight_cost := 
+ Coal 2017 999999
+;
+set FUELS := LNG Coal;
+param distribution_loss_rate := 0;
+param g_max_age := Dam 20 CA 20 Coal 20 PV_Panels 20 Wind_Turbine 20 CCGT 20;
+set FUEL_AVAILABILITY := ('South', 'LNG', 2016) ('South', 'LNG', 2017) ('East', 'Coal', 2017);
+param interest_rate := 0.07;
+param ts_period := TS2 2017 TS1 2016;
+param trans_efficiency := L2 1 L3 1 L1 1;
+param proj_max_capacity_factor := 
+ Represa TP1 1
+ Represa TP3 0.5
+ Eolico TP3 0.5
+ Represa TP2 0.8
+ SolarPVConstruccion TP2 1
+ SolarPV TP2 0.2
+ SolarPVConstruccion TP3 1
+ Eolico TP2 0.5
+ Eolico TP1 0.5
+ SolarPV TP1 0.2
+ SolarPV TP3 0.2
+;
+param g_is_cogen := Dam 0 CA 0 Coal 0 PV_Panels 0 Wind_Turbine 0 CCGT 0;
+param period_end := 2016 2016 2017 2017;
+param proj_connect_cost_per_mw := Eolico 1000 TurbinaGasCA 1000 SolarPV 1000 TurbinaVapor 1000 TurbinaGas 1000 SolarPVConstruccion 1000 Represa 1000;
+param g_variable_o_m := Dam 0 CA 10 Coal 2 PV_Panels 0 Wind_Turbine 0 CCGT 3;
+param g_energy_source := Dam "Water" CA "LNG" Coal "Coal" PV_Panels "Solar" Wind_Turbine "Wind" CCGT "LNG";
+set TRANSMISSION_LINES := L1 L2 L3;
+param fuel_cost := 
+ South LNG 2017 12
+ South LNG 2016 12
+ East Coal 2017 40
+;
+param trans_lz1 := L2 "West" L3 "South" L1 "West";
+set GENERATION_TECHNOLOGIES := Wind_Turbine PV_Panels CCGT CA Coal Dam;
+param proj_overnight_cost := 
+ TurbinaGas 2010 3000
+ SolarPVConstruccion 2017 3000
+ SolarPV 2010 3000
+ Eolico 2010 3000
+ Represa 2010 3000
+ TurbinaGasCA 2010 3000
+;
+set NON_FUEL_ENERGY_SOURCES := Wind Solar Water;
+param g_is_flexible_baseload := Dam 0 CA 0 Coal 0 PV_Panels 0 Wind_Turbine 0 CCGT 0;
+param local_td_annual_cost_per_mw := West 1 East 1 South 1;
+param trans_length_km := L2 100 L3 100 L1 100;
+param g_scheduled_outage_rate := Dam 0 CA 0 Coal 0 PV_Panels 0 Wind_Turbine 0 CCGT 0;
+param existing_local_td := West 1000 East 1000 South 1000;
+param g_fixed_o_m := 
+ Coal 2017 1000
+;
+param tp_ts := TP3 "TS2" TP2 "TS2" TP1 "TS1";
+param period_start := 2016 2016 2017 2017;
+set NEW_GENERATION_BUILDYEARS := ('Coal', 2017);
+set GEN_TECH_STORAGE := ;
+set GEN_TECH_CCS := ;
+param g_full_load_heat_rate := Coal 5 CA 20 CCGT 7;
+param g_is_variable := Dam 1 CA 0 Coal 0 PV_Panels 1 Wind_Turbine 1 CCGT 0;
+param base_financial_year := 2016;
+param trans_capital_cost_per_mw_km := 1000;
+set TIMEPOINTS := TP1 TP2 TP3;
+param trans_new_build_allowed := L2 0 L3 0 L1 0;
+param proj_load_zone := Eolico "East" TurbinaGasCA "West" SolarPV "South" TurbinaVapor "East" TurbinaGas "South" SolarPVConstruccion "West" Represa "West";
+param lz_peak_demand_mw := 
+ East 2016 100
+ South 2017 100
+ East 2017 300
+ South 2016 0
+ West 2016 200
+ West 2017 300
+;
+set PERIODS := 2016 2017;
+param f_co2_intensity := Coal 1 LNG 1;
+param proj_existing_cap := 
+ TurbinaGas 2010 500
+ SolarPVConstruccion 2017 100
+ SolarPV 2010 200
+ Eolico 2010 100
+ Represa 2010 100
+ TurbinaGasCA 2010 100
+;
+set PROJECTS_CAP_LIMITED := ;
+param f_upstream_co2_intensity := Coal 1 LNG 1;
+param existing_trans_cap := L2 100 L3 200 L1 100;
+param g_is_baseload := Dam 0 CA 0 Coal 1 PV_Panels 0 Wind_Turbine 0 CCGT 0;
+param proj_fixed_om := 
+ TurbinaGas 2010 3000
+ SolarPVConstruccion 2017 3000
+ SolarPV 2010 3000
+ Eolico 2010 3000
+ Represa 2010 3000
+ TurbinaGasCA 2010 3000
+;
+param g_forced_outage_rate := Dam 0 CA 0 Coal 0 PV_Panels 0 Wind_Turbine 0 CCGT 0;

@@ -1,0 +1,4 @@
+TRANSMISSION_LINE	trans_lz1	trans_lz2	trans_length_km	trans_efficiency	existing_trans_cap
+L1	West	East	100	1	100
+L2	West	South	100	1	100
+L3	South	East	100	1	200

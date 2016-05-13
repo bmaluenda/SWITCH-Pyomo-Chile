@@ -1,0 +1,4 @@
+LOAD_ZONE	balancing_area
+West	BA1
+East	BA1
+South	BA2

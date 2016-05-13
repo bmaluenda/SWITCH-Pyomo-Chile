@@ -1,0 +1,7 @@
+LOAD_ZONE	PERIOD	peak_demand_mw
+West	2016	200
+East	2016	100
+South	2016	0
+West	2017	300
+East	2017	300
+South	2017	100
