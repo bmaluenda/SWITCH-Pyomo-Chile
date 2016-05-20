@@ -4,4 +4,4 @@
 .DS_Store
 gurobi.log
 outputs*
-inputs*
+inputs

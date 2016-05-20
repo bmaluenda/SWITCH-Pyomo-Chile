@@ -27,7 +27,7 @@ def main(argv):
         '--outputs-dir', type=str, default='outputs',
         help='Directory to write output files (default is "outputs")')
     parser.add_argument(
-        '--solver', type=str, default='glpk',
+        '--solver', type=str, default='gurobi',
         help='Linear program solver to use (default is "glpk")')
     parser.add_argument(
         '--verbose', '-v', default=False, action='store_true',

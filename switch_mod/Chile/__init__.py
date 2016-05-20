@@ -3,7 +3,7 @@
 
 """
 
-This package adds different reserve modules, such as capacity
-margins and operating reserves.
+This package adds features specific for the Chile branch, but that
+could be useful for other regions as well.
 
 """

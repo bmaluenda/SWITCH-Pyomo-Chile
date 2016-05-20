@@ -1,6 +1,6 @@
 param ScenarioBasedData := False ;
 
-set Stages := Investment Operation ;
+set Stages := Investment Operation;
 
 set Nodes := RootNode 
     Bajo
@@ -36,7 +36,6 @@ param ScenarioLeafNode :=
 set StageVariables[Investment] := 
     BuildProj[*,*]
 	BuildTrans[*,*]
-	BuildLocalTD[*,*]
 ;
 
 set StageVariables[Operation] := 
