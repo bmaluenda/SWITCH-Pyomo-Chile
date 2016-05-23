@@ -344,9 +344,9 @@ CASE WHEN variable THEN 1 ELSE 0 END, CASE WHEN baseload THEN 1 ELSE 0 END, \
 CASE WHEN flexible_baseload THEN 1 ELSE 0 END, CASE WHEN cogen THEN 1 ELSE 0 END, \
 CASE WHEN competes_for_space THEN 1 ELSE 0 END, variable_o_m, \
 energy_source, technology_id, scheduled_outage_rate, forced_outage_rate, \
-CASE WHEN min_build_capacity = 0 THEN '.' ELSE TO_CHAR(min_build_capacity::real,'999D9') END,
-CASE WHEN full_load_heat_rate = 0 THEN '.' ELSE TO_CHAR(full_load_heat_rate::real,'99D99') END,
-CASE WHEN unit_size = 0 THEN '.' ELSE TO_CHAR(unit_size::real,'999D9') END
+CASE WHEN min_build_capacity IS NULL THEN '.' ELSE TO_CHAR(min_build_capacity::real,'9D999') END, \
+CASE WHEN full_load_heat_rate IS NULL THEN '.' ELSE TO_CHAR(full_load_heat_rate::real,'9D999') END, \
+CASE WHEN unit_size IS NULL THEN '.' ELSE TO_CHAR(unit_size::real,'9D999') END
 FROM chile_new.generator_info
 ORDER BY 1;" >> generator_info.tab
 
@@ -404,7 +404,7 @@ $connection_string -A -t -F  $'\t' -c  "SELECT project_name, \
 start_year, CASE WHEN overnight_cost IS NULL THEN '.' ELSE TO_CHAR(overnight_cost::real,'9999999D9') END, \
 CASE WHEN fixed_o_m IS NULL THEN '.' ELSE TO_CHAR(fixed_o_m::real,'999999D9') END
 FROM chile_new.project_info_existing;" >> proj_build_costs.tab
-exit 1
+
 ########################################################
 # FINANCIALS
 
@@ -418,9 +418,7 @@ echo 'param discount_rate := .07;'>>financials.dat
 
 #This convolusion of JOINS must be implemented because intermittent capacity factors are only defined until a certain year (I don't know which one). So, 2014 values are repeated yearly and timepoints are matched by hour and month.
 
-#A UNION must be implemented to stitch together capacity factors from new and existing plants that are not RoR
-
-#For some reason, only certain existing wind plants and RoR plants were taken into account in the original script. I will leave them like that to validate the model first.
+#A UNION must be implemented to stitch together capacity factors from new and existing plants that are not hydro
 
 #The second UNION incorporates the capacity factors from new
 
@@ -428,21 +426,22 @@ echo 'param discount_rate := .07;'>>financials.dat
 echo '	variable_capacity_factors.tab... inserting non-RoR'
 echo -e 'PROJECT\ttimepoint\tproj_max_capacity_factor' >>variable_capacity_factors.tab
 $connection_string -A -t -F  $'\t' -c  "
-SELECT TO_CHAR(project_id, '999'), t3.hour_number, CASE WHEN capacity_factor>1.999 THEN 1.999 ELSE capacity_factor END
-	FROM(
-		SELECT project_id, la_id, month_of_year, hour_of_year, hour_of_day, capacity_factor
-		FROM chile_new.new_projects_intermittent_capacity_factor_puc
-		JOIN chile_new.hours_2060 h USING (hour_number)
+SELECT project_name, TO_CHAR(t1.timestamp_cst, 'YYYYMMDDHH24'), TO_CHAR(t2.timestamp_cst, 'YYYYMMDDHH24'),\
+CASE WHEN capacity_factor>1.999 THEN 1.999 ELSE capacity_factor END
+FROM(	SELECT project_id, timestamp_cst, hour_of_year, capacity_factor
+		FROM chile_new.variable_capacity_factors_new
+		JOIN chile_new.hours_2060 USING (timestamp_cst)
 		WHERE year = 2014 ) t1
-	JOIN chile_new.new_projects_v4 USING (project_id, la_id)
-	JOIN (SELECT distinct year, t.hour_of_year, t.timestamp_cst, hour_number 
-			FROM chile_new.timescales_set_timepoints t
-			JOIN chile_new.hours_2060 USING (hour_number)
-			WHERE timescales_set_id = $timescales_SET_ID ORDER BY 1,2) t3 USING (hour_of_year)
-	JOIN chile_new.new_projects_scenarios USING (project_id)
-	WHERE new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID
+JOIN (SELECT hour_of_year, timestamp_cst 
+		FROM chile_new.timescales_set_timepoints
+		JOIN chile_new.hours_2060 USING (timestamp_cst)
+		WHERE timescales_set_id = $TIMESCALES_SET_ID ) t2 USING (hour_of_year)
+JOIN chile_new.project_info_new USING (project_id)
+JOIN chile_new.new_projects_scenarios USING (project_id)
+WHERE new_project_portfolio_id = $NEW_PROJECT_PORTFOLIO_ID;" >> variable_capacity_factors.tab
+exit 1
 UNION
-SELECT plant_name, t3.hour_number, capacity_factor
+SELECT project_name, TO_CHAR(t1.timestamp_cst, 'YYYYMMDDHH24'), capacity_factor
 	FROM(
 		SELECT project_id, la_id, month_of_year, hour_of_year, hour_of_day, capacity_factor
 		FROM chile_new.existing_plant_intermittent_capacity_factor
