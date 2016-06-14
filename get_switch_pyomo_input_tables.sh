@@ -1,7 +1,4 @@
 #!/bin/bash
-# The first line needs to stay #!/bin/bash to make this file a proper executable shell script. 
-
-# present_year was forced to be 2011
 
 # Date of creation: Spring 2016
 

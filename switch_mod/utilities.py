@@ -30,7 +30,7 @@ def define_AbstractModel(*module_list, **kwargs):
     args = kwargs.get("args", sys.argv[1:])
     return create_model(module_list, args)
 
-def create_model(module_list, args=sys.argv[1:]):
+def create_model(module_list, ignore_sys_args=False, args=sys.argv[1:]):
     """
 
     Construct a Pyomo AbstractModel using the Switch modules or packages
@@ -70,7 +70,11 @@ def create_model(module_list, args=sys.argv[1:]):
     # Define and parse model configuration options
     argparser = _ArgumentParser(allow_abbrev=False)
     _define_arguments(model, argparser)
-    model.options = argparser.parse_args(args)
+    if ignore_sys_args:
+        model.options = argparser.parse_args(args=[])
+    else:
+        model.options = argparser.parse_args(args)
+
     
     # Bind some utility functions to the model as class objects
     _add_min_data_check(model)

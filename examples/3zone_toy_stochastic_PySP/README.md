@@ -76,21 +76,41 @@ rhosetter-FS-only.py
 # Running the example
 
 First, the scenario tree inputs must be built. For this, the PySPInputGenerator.py
-script must be executed. The default parameters may be changed by modifying the file.
+script must be executed. This script will build the following input files for the 
+stochastic simulation:
+
+ScenarioStructure.dat
+	This file specifies the node and scenario names and probabilities in the
+	scenario tree.
+RootNode.dat
+	This file contains every parameter and set specified in .dat format at the
+	root node.
+
+To run this script, the following command must be executed. Inside the script a
+default relative inputs directory is specified, with a default value of "inputs".
+In this directory, a complete set of .tab files specifying all parameters and sets
+from the deterministic version of the model must be found. This path may be manually 
+changed to fit the user's directory structure.
 
 	>>>python PySPInputGenerator.py
 
-Then, the problem may be solved either by an extensive form formulation or by the
-progressive hedging algorithm.
+After this, nodal .dat files may be constructed specifying uncertain parameter 
+values. In this example, a simple scenario tree with a root node -where investment
+decisions are made- and 3 leaf nodes -where operations take place- is presented.
+Each scenario represents a realization of fuels prices, for which example .dat
+files are provided.
+
+Once the scenarios are defined, the problem may be solved either by an extensive 
+form formulation -EF- or by the progressive hedging algorithm -PH-.
 
 ####
 #(i) EF: The runef script has multiple options. Refer to PySP documentation for more
-specifications. A simple and effective way of solving a problem is to execute the
-following command:
+specifications. A simple and effective way of solving this example problem is to 
+execute the following command from the /3zone_toy_stochastic_PySP directory:
 
-	>>>runef -m MODEL_DIRECTORY -i INSTANCE_DIRECTORY --solve --solver=SOLVER
-			--output-solver-log --output-times	--traceback --solution-writer=
-			pyomo.pysp.plugins.csvsolutionwriter
+	>>>runef --model-directory=. --instance-directory=inputs/pysp_inputs --solve 
+		--solver=gurobi --output-solver-log --output-times --traceback 
+		--solution-writer=pyomo.pysp.plugins.csvsolutionwriter
 
 MODEL_DIRECTORY must be the relative path to the ReferenceModel.py file.
 
