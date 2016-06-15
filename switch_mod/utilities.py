@@ -71,6 +71,8 @@ def create_model(module_list, ignore_sys_args=False, args=sys.argv[1:]):
     argparser = _ArgumentParser(allow_abbrev=False)
     _define_arguments(model, argparser)
     if ignore_sys_args:
+        # Command line arguments are ignored when building a model
+        # object for the PySP package.
         model.options = argparser.parse_args(args=[])
     else:
         model.options = argparser.parse_args(args)

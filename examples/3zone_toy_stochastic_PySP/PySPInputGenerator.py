@@ -6,7 +6,8 @@
 Generate .dat files required by the PySP pyomo module, either for use with the
 runef or runph commands. This script serves only as a specific example in
 order to learn how the runef and runph commands work and does not pretend to
-be able to
+be able to generate any scenario structure in a most flexible way. More 
+versatility will be coded in the future.
 
 This generator considers a two stage optimization problem, where all scenarios
 have the same probability of ocurring. The ScenarioBasedData PySP parameter is
