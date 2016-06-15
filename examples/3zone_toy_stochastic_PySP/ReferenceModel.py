@@ -39,7 +39,7 @@ except IOError, exc:
     sys.exit('Failed to open input file: {}'.format(exc))
 module_list = [line.rstrip('\n') for line in module_fh]
 module_list.insert(0,'switch_mod')
-model = utilities.create_model(module_list, ignore_sys_args=True)
+model = utilities.create_model(module_list, args=[])
 # The following code augments the model object with Expressions for the 
 # Stage costs, which both runef and runph scripts need in order to build 
 # the stochastic objective function. In this particular example, only
@@ -80,12 +80,5 @@ model.OperationCost = Expression(rule=lambda m: sum(
                 sum(calc_tp_costs_in_period(m, t) for t in m.PERIOD_TPS[p]) * financials.uniform_series_to_present_value(
                 m.discount_rate, m.period_length_years[p]) * financials.future_to_present_value(
                 m.discount_rate, (m.period_start[p] - m.base_financial_year)) for p in m.PERIODS))
-
-# Define Suffixes in case a linearization of the cuadratic term of the
-# objective function is wanted when using the Progressive Hedging algorithm.
-
-if not hasattr(model, 'dual'):
-    model.dual = Suffix(direction=Suffix.IMPORT)
-model.rc = Suffix(direction=Suffix.IMPORT)
 
 print "model successfully loaded..."

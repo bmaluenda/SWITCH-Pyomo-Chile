@@ -30,7 +30,7 @@ def define_AbstractModel(*module_list, **kwargs):
     args = kwargs.get("args", sys.argv[1:])
     return create_model(module_list, args)
 
-def create_model(module_list, ignore_sys_args=False, args=sys.argv[1:]):
+def create_model(module_list, args=sys.argv[1:]):
     """
 
     Construct a Pyomo AbstractModel using the Switch modules or packages
@@ -54,6 +54,15 @@ def create_model(module_list, ignore_sys_args=False, args=sys.argv[1:]):
     storage without rewriting the core equations for system costs. The
     two primary use cases for dynamic components so far are load-zone
     level energy balancing and overall system costs.
+    
+    All modules can request access to command line parameters and set their
+    default values for those options. If this codebase is being used more like a
+    library than a stand-alone executable, this behavior can cause problems. For
+    example, running this model with PySP's runph tool will cause errors where a
+    runph argument such as --instance-directory is unknown to the switch
+    modules, so parse_args() generates an error. This behavior can be avoided
+    calling this function with an empty list for args: 
+        create_model(module_list, args=[])
 
     SYNOPSIS:
     >>> from switch_mod.utilities import define_AbstractModel
@@ -70,12 +79,7 @@ def create_model(module_list, ignore_sys_args=False, args=sys.argv[1:]):
     # Define and parse model configuration options
     argparser = _ArgumentParser(allow_abbrev=False)
     _define_arguments(model, argparser)
-    if ignore_sys_args:
-        # Command line arguments are ignored when building a model
-        # object for the PySP package.
-        model.options = argparser.parse_args(args=[])
-    else:
-        model.options = argparser.parse_args(args)
+    model.options = argparser.parse_args(args)
 
     
     # Bind some utility functions to the model as class objects
@@ -127,7 +131,8 @@ def load_inputs(model, inputs_dir=None, attachDataPortal=True):
     return instance
 
 
-def save_inputs_as_dat(model, instance, save_path="inputs/complete_inputs.dat", exclude=[]):
+def save_inputs_as_dat(model, instance, save_path="inputs/complete_inputs.dat",
+                       exclude=[], determistic_order=False):
     """
     Save input data to a .dat file for use with PySP or other command line
     tools that have not been fully integrated with DataPortal.
@@ -169,7 +174,9 @@ def save_inputs_as_dat(model, instance, save_path="inputs/complete_inputs.dat", 
                                 for key,value in component_data.iteritems()))
                     else:
                         f.write("\n")
-                        for key,value in component_data.iteritems():
+                        for key,value in (sorted(component_data.iteritems()) 
+                                          if determistic_order 
+                                          else component_data.iteritems()):
                             f.write(" " + 
                                     ' '.join(map(str, key)) + " " +
                                     quote_str(value) + "\n")

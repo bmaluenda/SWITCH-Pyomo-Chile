@@ -54,15 +54,11 @@ inputs_dir = "inputs"
 pysp_subdir = "pysp_inputs"
 
 # Stage names. Can be any string and must be specified in order.
-stage_list = [
-    "Investment", "Operation"]
-    
-# First stage variables
-build_vars = [
-    "BuildProj", "BuildLocalTD", "BuildTrans"]
-# Second stage variables
-operate_vars = [
-    "DispatchProj", "ProjFuelUseRate"]
+stage_list = ["Investment", "Operation"]   
+stage_vars = {
+    "Investment": ["BuildProj", "BuildLocalTD", "BuildTrans"],
+    "Operation": ["DispatchProj", "ProjFuelUseRate"]
+}
 # List of scenario names
 scenario_list = [
     "LowFuelCosts", "MediumFuelCosts", "HighFuelCosts"]
@@ -79,6 +75,7 @@ try:
     module_fh = open(os.path.join(inputs_dir, 'modules'), 'r')
 except IOError, exc:
     sys.exit('Failed to open input file: {}'.format(exc))
+
 module_list = [line.rstrip('\n') for line in module_fh]
 module_list.insert(0,'switch_mod')
 
@@ -92,17 +89,16 @@ print "inputs successfully loaded..."
       
 def save_dat_files():
 
+    if not os.path.exists(os.path.join(inputs_dir, pysp_subdir)):
+        os.makedirs(os.path.join(inputs_dir, pysp_subdir))
+
     ##############
     # RootNode.dat
 
-    if not os.path.exists(os.path.join(inputs_dir, pysp_subdir)):
-        os.makedirs(os.path.join(inputs_dir, pysp_subdir))
-    # Touch the root node file
-    open(os.path.join(inputs_dir, pysp_subdir, "RootNode.dat"), 'a').close()    
     dat_file = os.path.join(inputs_dir, pysp_subdir, "RootNode.dat")
     print "creating and saving {}...".format(dat_file)
     utilities.save_inputs_as_dat(
-        model, instance, save_path=dat_file)
+        model, instance, save_path=dat_file, determistic_order=True)
     
     #######################
     # ScenarioStructure.dat
@@ -153,27 +149,31 @@ def save_dat_files():
             f.write("\n    Scenario_{s} {s}".format(s=s, p=p))
         f.write(";\n\n")
 
+        # Write out variable names for pysp.. if a variable has indexes like
+        # BuildProj[proj, build_year], print it as BuildProj[*,*].
         def write_var_name(f, cname):
             if hasattr(instance, cname):
                 dimen = getattr(instance, cname).index_set().dimen
-                indexing = "" if dimen == 0 else (",".join(["*"]*dimen))
-                f.write("    {cn}[{dim}]\n".format(cn=cname, dim=indexing))
+                if dimen == 0:
+                   f.write("    {cn}\n".format(cn=cname))
+                else:
+                    indexing = (",".join(["*"]*dimen))
+                    f.write("    {cn}[{dim}]\n".format(cn=cname, dim=indexing))
+            else:
+                raise ValueError(
+                    "Variable '{}' is not a component of the model. Did you make a typo?".
+                    format(cname))
 
-        # All build variables go in the Investment stage
-        f.write("set StageVariables[{}] := \n".format(stage_list[0]))
-        for cn in build_vars:
-            write_var_name(f, cn)
-        f.write(";\n\n")
-        
-        # All operations variables go in the Operation stage
-        f.write("set StageVariables[{}] := \n".format(stage_list[1]))
-        for cn in operate_vars:
-            write_var_name(f, cn)
-        f.write(";\n\n")
+        for st in stage_list:
+            f.write("set StageVariables[{}] := \n".format(st))
+            for var in stage_vars[st]:
+                write_var_name(f, var)
+            f.write(";\n\n")
 
+        # The InvestmentCost and OperationCost components are defined in ReferenceModel.py
         f.write("param StageCostVariable := \n")
-        f.write("    {s} {s}Cost\n".format(s=stage_list[0]))
-        f.write("    {s} {s}Cost\n".format(s=stage_list[1]))
+        f.write("    Investment InvestmentCost\n")
+        f.write("    Operation OperationCost\n")
         f.write(";")
 
 ####################
