@@ -27,7 +27,7 @@ def main(argv):
         '--outputs-dir', type=str, default='outputs',
         help='Directory to write output files (default is "outputs")')
     parser.add_argument(
-        '--solver', type=str, default='gurobi',
+        '--solver', type=str, default='glpk',
         help='Linear program solver to use (default is "glpk")')
     parser.add_argument(
         '--verbose', '-v', default=False, action='store_true',
@@ -36,7 +36,7 @@ def main(argv):
 
     (switch_model, switch_instance) = load(args.inputs_dir)
     opt = pyomo.opt.SolverFactory(args.solver)
-    results = opt.solve(switch_instance, keepfiles=False, tee=True)
+    results = opt.solve(switch_instance, keepfiles=False, tee=False)
     switch_model.save_results(results, switch_instance, args.outputs_dir)
 
     if args.verbose:

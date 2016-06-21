@@ -63,7 +63,6 @@ def define_components(mod):
     mod.min_data_check('lz_balancing_area')
     mod.BALANCING_AREAS = Set(initialize=lambda m: set(
         m.lz_balancing_area[z] for z in m.LOAD_ZONES))
-
     mod.quickstart_res_load_frac = Param(
         mod.BALANCING_AREAS, within=PositiveReals, default=0.03,
         validate=lambda m, val, b: val < 1)

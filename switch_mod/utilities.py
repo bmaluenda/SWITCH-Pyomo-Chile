@@ -80,7 +80,6 @@ def create_model(module_list, args=sys.argv[1:]):
     argparser = _ArgumentParser(allow_abbrev=False)
     _define_arguments(model, argparser)
     model.options = argparser.parse_args(args)
-
     
     # Bind some utility functions to the model as class objects
     _add_min_data_check(model)
@@ -247,6 +246,7 @@ def save_results(model, results, instance, outdir):
             print "Model solved successfully."
         _save_results(model, instance, outdir, model.module_list)
         _save_generic_results(instance, outdir)
+        _save_total_cost_value(instance, outdir)
 
     return success
 
@@ -562,7 +562,15 @@ def _save_generic_results(instance, outdir):
                              for i in xrange(var.index_set().dimen)] +
                             [var.name])
             for key, v in var.iteritems():
-                writer.writerow(key + (v.value,))
+                writer.writerow(tuple(make_iterable(key)) + (v.value,))
+
+
+def _save_total_cost_value(instance, outdir):
+    values = instance.Minimize_System_Cost.values()
+    assert len(values) == 1
+    total_cost = values[0].expr()
+    with open(os.path.join(outdir, 'total_cost.txt'), 'w') as fh:
+        fh.write('%s\n' % total_cost)
 
 
 class InputError(Exception):
@@ -586,8 +594,7 @@ def load_aug(switch_data, optional=False, auto_select=False,
 
     This is a wrapper for the DataPortal object that accepts additional
     keywords. This currently supports a flag for the file being optional.
-    In the future, this could also support a list of optional columns.
-    The name is not great and may be changed as well.
+    The name load_aug() is not great and may be changed.
 
     """
     path = kwds['filename']
@@ -603,8 +610,6 @@ def load_aug(switch_data, optional=False, auto_select=False,
     # Skip if the file is empty or has no data in the first row.
     if optional and (headers == [''] or dat1 == ['']):
         return
-    # copy the optional_params to avoid side-effects when the list is altered below
-    optional_params=list(optional_params)
     # Try to get a list of parameters. If param was given as a
     # singleton or a tuple, make it into a list that can be edited.
     params = []

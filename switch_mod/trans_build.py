@@ -88,7 +88,8 @@ def define_components(mod):
     trans_derating_factor[tx in TRANSMISSION_LINES] is an overall
     derating factor for each transmission line that can reflect forced
     outage rates, stability or contingency limitations. This parameter
-    is optional and defaults to 0.
+    is optional and defaults to 1. This parameter should be in the
+    range of 0 to 1, being 0 a value that disables the line completely.
 
     TransCapacityAvailable[(tx, bld_yr) in TRANS_BUILD_YEARS] is an
     expression that returns the available transfer capacity of a
@@ -181,11 +182,11 @@ def define_components(mod):
     mod.trans_lz2 = Param(mod.TRANSMISSION_LINES, within=mod.LOAD_ZONES)
     mod.min_data_check('TRANSMISSION_LINES', 'trans_lz1', 'trans_lz2')
     mod.trans_dbid = Param(mod.TRANSMISSION_LINES, default=lambda m, tx: tx)
-    mod.trans_length_km = Param(mod.TRANSMISSION_LINES, within=NonNegativeReals)
+    mod.trans_length_km = Param(mod.TRANSMISSION_LINES, within=PositiveReals)
     mod.trans_efficiency = Param(
         mod.TRANSMISSION_LINES,
         within=PositiveReals,
-        validate=lambda m, val, tx: 0 <= val <= 1)
+        validate=lambda m, val, tx: val <= 1)
     mod.EXISTING_TRANS_BLD_YRS = Set(
         dimen=2,
         initialize=lambda m: set(
@@ -231,12 +232,12 @@ def define_components(mod):
     mod.trans_derating_factor = Param(
         mod.TRANSMISSION_LINES,
         within=NonNegativeReals,
-        default=0,
+        default=1,
         validate=lambda m, val, tx: val <= 1)
     mod.TransCapacityAvailable = Expression(
         mod.TRANSMISSION_LINES, mod.PERIODS,
         rule=lambda m, tx, period: (
-            m.TransCapacity[tx, period] * (1 - m.trans_derating_factor[tx])))
+            m.TransCapacity[tx, period] * m.trans_derating_factor[tx]))
     mod.trans_terrain_multiplier = Param(
         mod.TRANSMISSION_LINES,
         within=Reals,
@@ -251,7 +252,7 @@ def define_components(mod):
     mod.trans_fixed_o_m_fraction = Param(
         within=PositiveReals,
         default=0.03)
-    # Total annaul fixed costs for building new transmission lines...
+    # Total annual fixed costs for building new transmission lines...
     # Multiply capital costs by capital recover factor to get annual
     # payments. Add annual fixed O&M that are expressed as a fraction of
     # overnight costs.
@@ -262,7 +263,6 @@ def define_components(mod):
             m.trans_capital_cost_per_mw_km * m.trans_terrain_multiplier[tx] *
             m.trans_length_km[tx] * (crf(m.interest_rate, m.trans_lifetime_yrs) +
                 m.trans_fixed_o_m_fraction)))
-    
     # An expression to summarize annual costs for the objective
     # function. Units should be total annual future costs in $base_year
     # real dollars. The objective function will convert these to
@@ -315,7 +315,11 @@ def load_inputs(mod, switch_data, inputs_dir):
         TRANSMISSION_LINE, trans_dbid, trans_derating_factor,
         trans_terrain_multiplier, trans_new_build_allowed
 
-    Note that the next file is formatted as .dat, not as .tab.
+    Note that the next file is formatted as .dat, not as .tab. The
+    distribution_loss_rate parameter should only be inputted if the 
+    local_td module is loaded in the simulation. If this parameter is
+    specified a value in trans_params.dat and local_td is not included
+    in the module list, then an error will be raised.
 
     trans_params.dat
         trans_capital_cost_per_mw_km, trans_lifetime_yrs,

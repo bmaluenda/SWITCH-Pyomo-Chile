@@ -13,6 +13,7 @@ SYNOPSIS
 import os
 from pyomo.environ import *
 
+
 def define_components(mod):
     """
 
@@ -126,6 +127,7 @@ def define_dynamic_components(mod):
             ) == sum(
                 getattr(m, component)[lz, t]
                 for component in m.LZ_Energy_Components_Consume)))
+
 
 def load_inputs(mod, switch_data, inputs_dir):
     """
