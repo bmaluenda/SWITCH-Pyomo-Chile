@@ -2,7 +2,7 @@
 
 # Date of creation: Spring 2016
 
-# SWITCH chile_new!
+# SWITCH-Chile!
 
 # Note about the authors: This file was modified by B Maluenda from get_switch_input_tables.sh written by JP Carvallo and P Hidalgo.
 
