@@ -140,6 +140,7 @@ def define_components(mod):
     describes which transmission builds will be operational in a given
     period. Currently, transmission lines are kept online indefinitely,
     with parts being replaced as they wear out.
+    
     PERIOD_RELEVANT_TRANS_BUILDS[p] will return a subset of (tx, bld_yr)
     in TRANS_BUILD_YEARS.
 
@@ -283,6 +284,10 @@ def define_components(mod):
     mod.TRANS_DIRECTIONAL = Set(
         dimen=2,
         initialize=init_TRANS_DIRECTIONAL)
+    mod.CONNECTED_LOAD_ZONES = Set(
+        mod.LOAD_ZONES,
+        initialize=lambda m, lz: set(
+            l for l in m.LOAD_ZONES if (lz,l) in m.TRANS_DIRECTIONAL))
 
     def init_trans_d_line(m, lz_from, lz_to):
         for tx in m.TRANSMISSION_LINES:
